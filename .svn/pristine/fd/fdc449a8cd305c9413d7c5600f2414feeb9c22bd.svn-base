@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>基础代码管理</title>
+</head>
+<body>
+    树状结构,双击进入下一级.
+    按钮: 新增 编辑 删除.
+</body>
+</html>

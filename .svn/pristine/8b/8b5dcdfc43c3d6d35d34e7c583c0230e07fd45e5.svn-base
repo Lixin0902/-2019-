@@ -1,0 +1,53 @@
+<?php
+/**
+ * Created by IntelliJ IDEA.
+ * User: Can Xie
+ * Date: 2019/6/13
+ * Time: 10:50
+ */
+
+namespace app\index\controller;
+use app\xt\controller\BaseController;
+
+/**
+ * 用于实现html页面跳转功能
+ * @package app\index\controller
+ * @author 谢灿
+ * @data 2019年6月17日
+ */
+class Html extends BaseController
+{
+    function index()
+    {
+        return '??';
+    }
+
+    function expertInfoList()
+    {
+        return $this->fetch();
+    }
+    function expertAnalysis()
+    {
+        return $this->fetch();
+    }
+    function expertInfoAdd()
+    {
+        return $this->fetch();
+    }
+    function expertInfoEdit()
+    {
+        return $this->fetch();
+    }
+    function certificateList()
+    {
+        return $this->fetch();
+    }
+    function certificateEdit()
+    {
+        return $this->fetch();
+    }
+    function certificateAdd()
+    {
+        return $this->fetch();
+    }
+}

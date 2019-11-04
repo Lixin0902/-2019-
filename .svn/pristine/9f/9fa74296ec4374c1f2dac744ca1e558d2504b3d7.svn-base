@@ -1,0 +1,101 @@
+<?php
+
+namespace app\index\controller;
+
+use app\xt\controller\BaseController;
+use app\index\model\ExpertCertificate as CeritificateModel;
+/**
+ * 用于实现专家资格证书相关功能
+ * @package app\index\controller
+ * @author 谢灿
+ * @data 2019年6月17日
+ */
+class ExpertCertificate extends BaseController
+{
+    /**
+     * 显示资源列表
+     *
+     * @return \think\Response
+     */
+    public function index()
+    {
+//        $model = new CeritificateModel();
+//        $certificate = $model->where("key_id",1)->find();
+//        dump($certificate->info());
+        $infoModel = new \app\index\model\ExpertInformation();
+        $infoModel -> where('key_id', 1)->find();
+        if(isset($infoModel)){
+            $certificates = $infoModel->certificates();
+            dump($certificates);
+        }
+    }
+
+
+    /**
+     * 显示创建资源表单页.
+     *
+     * @return \think\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * 保存新建的资源
+     *
+     * @param  \think\Request  $request
+     * @return \think\Response
+     */
+    public function save(Request $request)
+    {
+        return 'save';
+    }
+
+    /**
+     * 显示指定的资源
+     * @param  int  $id
+     * @return \think\Response
+     */
+    public function read($id)
+    {
+        //
+    }
+
+    /**
+     * 显示编辑资源表单页.
+     *
+     * @param  int  $id
+     * @return \think\Response
+     */
+    public function edit($id)
+    {
+        //
+        return returnJson(200,'操作成功','表单数据');
+    }
+
+    /**
+     * 保存更新的资源
+     *
+     * @param  \think\Request  $request
+     * @param  int  $id
+     * @return \think\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+        return returnJson(200,'操作成功','表单数据');
+    }
+
+    /**
+     * 删除指定资源
+     *
+     * @param  int  $id
+     * @return \think\Response
+     */
+    public function delete($id)
+    {
+        //
+    }
+
+}

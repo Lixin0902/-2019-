@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>专家信息</title>
+    <link rel="stylesheet" type="text/css" href="__layUI__/css/layui.css">
+    <!--<link rel="stylesheet" type="text/css" href="__CSS__/expert_info_list.css">-->
+    <link rel="stylesheet" type="text/css" href="__CSS__/xadmin.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/font.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/layer.css">
+</head>
+
+<!--包含内容:-->
+<!--专家信息列表, 查询,新增,编辑,删除,导出-->
+<body class="form-wrap">
+<script src="__JS__/jquery.min.js"></script>
+<script src="__layUI__/layui.js"></script>
+<script src="__JS__/xadmin.js"></script>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">专家信息</div>
+        <div class="layui-card-body" style="padding: 15px;">
+            <!--<div class="test-table-reload-btn" style="margin-bottom: 10px;">-->
+                <!--搜索姓名或其他相关信息：-->
+                <!--<div class="layui-inline">-->
+                    <!--<input class="layui-input" name="id" id="test-table-demoReload" autocomplete="off">-->
+                <!--</div>-->
+                <!--<button class="layui-btn" data-type="reload">搜索</button>-->
+            <!--</div>-->
+            <form class="layui-form  x-so">
+                <!--<input class="layui-input" placeholder="开始日" name="start" id="start" lay-key="1">-->
+                <!--<input class="layui-input" placeholder="截止日" name="end" id="end" lay-key="2">-->
+                <label class="layui-form-label">个人信息：</label>
+                <input type="text" name="username" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+                <div class="layui-input-inline">
+                    <select name="contrller">
+                        <option>性别</option>
+                        <option>男</option>
+                        <option>女</option>
+                    </select><div class="layui-unselect layui-form-select"><div class="layui-select-title"><input type="text" placeholder="请选择" value="性别" readonly="" class="layui-input layui-unselect"><i class="layui-edge"></i></div><dl class="layui-anim layui-anim-upbit" style=""><dd lay-value="性别" class="layui-this">性别</dd><dd lay-value="男" class="">男</dd><dd lay-value="女" class="">女</dd></dl></div>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="contrller">
+                        <option>职称</option>
+                        <option>学士</option>
+                        <option>硕士</option>
+                        <option>博士</option>
+                    </select><div class="layui-unselect layui-form-select"><div class="layui-select-title"><input type="text" placeholder="请选择" value="职称" readonly="" class="layui-input layui-unselect"><i class="layui-edge"></i></div><dl class="layui-anim layui-anim-upbit" style=""><dd lay-value="职称" class="layui-this">职称</dd><dd lay-value="学士" class="">学士</dd><dd lay-value="硕士" class="">硕士</dd><dd lay-value="博士" class="">博士</dd></dl></div>
+                </div>
+                <div class="layui-input-inline">
+                    <label class="layui-form-label">年龄段：</label>
+                    <input type="text" name="username" placeholder="请输入年龄范围" autocomplete="off" class="layui-input">-
+                    <input type="text" name="username" placeholder="请输入年龄范围" autocomplete="off" class="layui-input">
+                </div>
+                <br><br>
+                <div class="layui-input-inline">
+                    <label class="layui-form-label">行业信息：</label>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="contrller">
+                        <option>所属行业</option>
+                        <option>一级行业</option>
+                        <option>二级行业</option>
+                    </select><div class="layui-unselect layui-form-select"><div class="layui-select-title"><input type="text" placeholder="请选择" value="所属行业" readonly="" class="layui-input layui-unselect"><i class="layui-edge"></i></div><dl class="layui-anim layui-anim-upbit" style=""><dd lay-value="所属行业" class="layui-this">所属行业</dd><dd lay-value="一级行业" class="">一级行业</dd><dd lay-value="二级行业" class="">二级行业</dd></dl></div>
+                </div>
+
+                <div class="layui-input-inline">
+                    <select name="contrller">
+                        <option value="">从事专业</option>
+                        <option value="0">技术类</option>
+                        <option value="1">文职类</option>
+                        <option value="2">教育类</option>
+                        <option value="3">计算机</option>
+                        <option value="4">金融</option>
+                        <option value="5">建筑</option>
+                    </select><div class="layui-unselect layui-form-select"><div class="layui-select-title"><input type="text" placeholder="从事专业" value="" readonly="" class="layui-input layui-unselect"><i class="layui-edge"></i></div><dl class="layui-anim layui-anim-upbit"><dd lay-value="" class="layui-select-tips">从事专业</dd><dd lay-value="0" class="">技术类</dd><dd lay-value="1" class="">文职类</dd><dd lay-value="2" class="">教育类</dd><dd lay-value="3" class="">计算机</dd><dd lay-value="4" class="">金融</dd><dd lay-value="5" class="">建筑</dd></dl></div>
+                </div>
+                    <div class="layui-input-inline">
+                        <select name="contrller">
+                            <option>是否为资深专家</option>
+                            <option>是</option>
+                            <option>否</option>
+                        </select><div class="layui-unselect layui-form-select"><div class="layui-select-title"><input type="text" placeholder="请选择" value="是否为资深专家" readonly="" class="layui-input layui-unselect"><i class="layui-edge"></i></div><dl class="layui-anim layui-anim-upbit" style=""><dd lay-value="是否为资深专家" class="layui-this">是否为资深专家</dd><dd lay-value="是" class="">是</dd><dd lay-value="否" class="">否</dd></dl></div>
+                    </div>
+                    <br><br>
+                    <div id="x-city">
+                        <label class="layui-form-label">所在地：</label>
+                        <div class="layui-input-inline">
+                            <select name="province" lay-filter="province"><option value="北京">北京</option><option value="上海">上海</option><option value="天津">天津</option><option value="重庆">重庆</option><option value="四川">四川</option><option value="贵州">贵州</option><option value="云南">云南</option><option value="西藏">西藏</option><option value="河南">河南</option><option value="湖北">湖北</option><option value="湖南">湖南</option><option selected="" value="广东">广东</option><option value="广西">广西</option><option value="陕西">陕西</option><option value="甘肃">甘肃</option><option value="青海">青海</option><option value="宁夏">宁夏</option><option value="新疆">新疆</option><option value="河北">河北</option><option value="山西">山西</option><option value="内蒙古">内蒙古</option><option value="江苏">江苏</option><option value="浙江">浙江</option><option value="安徽">安徽</option><option value="福建">福建</option><option value="江西">江西</option><option value="山东">山东</option><option value="辽宁">辽宁</option><option value="吉林">吉林</option><option value="黑龙江">黑龙江</option><option value="海南">海南</option><option value="台湾">台湾</option><option value="香港">香港</option><option value="澳门">澳门</option></select><div class="layui-unselect layui-form-select"><div class="layui-select-title"><input type="text" placeholder="请选择" value="广东" readonly="" class="layui-input layui-unselect"><i class="layui-edge"></i></div><dl class="layui-anim layui-anim-upbit"><dd lay-value="北京" class="">北京</dd><dd lay-value="上海" class="">上海</dd><dd lay-value="天津" class="">天津</dd><dd lay-value="重庆" class="">重庆</dd><dd lay-value="四川" class="">四川</dd><dd lay-value="贵州" class="">贵州</dd><dd lay-value="云南" class="">云南</dd><dd lay-value="西藏" class="">西藏</dd><dd lay-value="河南" class="">河南</dd><dd lay-value="湖北" class="">湖北</dd><dd lay-value="湖南" class="">湖南</dd><dd lay-value="广东" class="layui-this">广东</dd><dd lay-value="广西" class="">广西</dd><dd lay-value="陕西" class="">陕西</dd><dd lay-value="甘肃" class="">甘肃</dd><dd lay-value="青海" class="">青海</dd><dd lay-value="宁夏" class="">宁夏</dd><dd lay-value="新疆" class="">新疆</dd><dd lay-value="河北" class="">河北</dd><dd lay-value="山西" class="">山西</dd><dd lay-value="内蒙古" class="">内蒙古</dd><dd lay-value="江苏" class="">江苏</dd><dd lay-value="浙江" class="">浙江</dd><dd lay-value="安徽" class="">安徽</dd><dd lay-value="福建" class="">福建</dd><dd lay-value="江西" class="">江西</dd><dd lay-value="山东" class="">山东</dd><dd lay-value="辽宁" class="">辽宁</dd><dd lay-value="吉林" class="">吉林</dd><dd lay-value="黑龙江" class="">黑龙江</dd><dd lay-value="海南" class="">海南</dd><dd lay-value="台湾" class="">台湾</dd><dd lay-value="香港" class="">香港</dd><dd lay-value="澳门" class="">澳门</dd></dl></div>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="city" lay-filter="city"><option selected="" value="广州市">广州市</option><option value="韶关市">韶关市</option><option value="深圳市">深圳市</option><option value="珠海市">珠海市</option><option value="汕头市">汕头市</option><option value="佛山市">佛山市</option><option value="江门市">江门市</option><option value="湛江市">湛江市</option><option value="茂名市">茂名市</option><option value="肇庆市">肇庆市</option><option value="惠州市">惠州市</option><option value="梅州市">梅州市</option><option value="汕尾市">汕尾市</option><option value="河源市">河源市</option><option value="阳江市">阳江市</option><option value="清远市">清远市</option><option value="东莞市">东莞市</option><option value="中山市">中山市</option><option value="潮州市">潮州市</option><option value="揭阳市">揭阳市</option><option value="云浮市">云浮市</option></select><div class="layui-unselect layui-form-select"><div class="layui-select-title"><input type="text" placeholder="请选择" value="广州市" readonly="" class="layui-input layui-unselect"><i class="layui-edge"></i></div><dl class="layui-anim layui-anim-upbit"><dd lay-value="广州市" class="layui-this">广州市</dd><dd lay-value="韶关市" class="">韶关市</dd><dd lay-value="深圳市" class="">深圳市</dd><dd lay-value="珠海市" class="">珠海市</dd><dd lay-value="汕头市" class="">汕头市</dd><dd lay-value="佛山市" class="">佛山市</dd><dd lay-value="江门市" class="">江门市</dd><dd lay-value="湛江市" class="">湛江市</dd><dd lay-value="茂名市" class="">茂名市</dd><dd lay-value="肇庆市" class="">肇庆市</dd><dd lay-value="惠州市" class="">惠州市</dd><dd lay-value="梅州市" class="">梅州市</dd><dd lay-value="汕尾市" class="">汕尾市</dd><dd lay-value="河源市" class="">河源市</dd><dd lay-value="阳江市" class="">阳江市</dd><dd lay-value="清远市" class="">清远市</dd><dd lay-value="东莞市" class="">东莞市</dd><dd lay-value="中山市" class="">中山市</dd><dd lay-value="潮州市" class="">潮州市</dd><dd lay-value="揭阳市" class="">揭阳市</dd><dd lay-value="云浮市" class="">云浮市</dd></dl></div>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="area" lay-filter="area"><option value="市辖区">市辖区</option><option selected="" value="东山区">东山区</option><option value="荔湾区">荔湾区</option><option value="越秀区">越秀区</option><option value="海珠区">海珠区</option><option value="天河区">天河区</option><option value="芳村区">芳村区</option><option value="白云区">白云区</option><option value="黄埔区">黄埔区</option><option value="番禺区">番禺区</option><option value="花都区">花都区</option><option value="增城市">增城市</option><option value="从化市">从化市</option></select><div class="layui-unselect layui-form-select"><div class="layui-select-title"><input type="text" placeholder="请选择" value="东山区" readonly="" class="layui-input layui-unselect"><i class="layui-edge"></i></div><dl class="layui-anim layui-anim-upbit"><dd lay-value="市辖区" class="">市辖区</dd><dd lay-value="东山区" class="layui-this">东山区</dd><dd lay-value="荔湾区" class="">荔湾区</dd><dd lay-value="越秀区" class="">越秀区</dd><dd lay-value="海珠区" class="">海珠区</dd><dd lay-value="天河区" class="">天河区</dd><dd lay-value="芳村区" class="">芳村区</dd><dd lay-value="白云区" class="">白云区</dd><dd lay-value="黄埔区" class="">黄埔区</dd><dd lay-value="番禺区" class="">番禺区</dd><dd lay-value="花都区" class="">花都区</dd><dd lay-value="增城市" class="">增城市</dd><dd lay-value="从化市" class="">从化市</dd></dl></div>
+                        </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button class="layui-btn" lay-submit="" lay-filter="sreach" style="position: absolute; right: 389px;"><i class="layui-icon">查询</i></button>
+                        <!--<button class="layui-btn" style="float: right; margin-right: 21px;"><i class="layui-icon layui-icon-refresh-3">重置</i></button>-->
+                        <!--<button class="layui-btn" lay-submit="" lay-filter="sreach" style="float: right;margin-right: 24px;"><i class="layui-icon">查询</i></button>-->
+                        <!--<button class="layui-btn" lay-submit="" lay-filter="refresh-3"><i class="layui-icon">查询</i></button>-->
+                        <button class="layui-btn" style="position: absolute; right: 276px;"><i class="layui-icon layui-icon-refresh-1">重置</i></button>
+                    </div>
+            </form>
+            <div class="x-body">
+
+                <xblock>
+                    <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
+                    <button class="layui-btn layui-btn-normal" onclick=""><i class="layui-icon"></i>批量导出</button>
+                    <button class="layui-btn" onclick="x_admin_show('添加用户','./member-add.html',600,400)"><i class="layui-icon"></i>添加</button>
+                    <span class="x-right" style="line-height:40px">共有数据：88 条</span>
+                </xblock>
+                <table class="layui-table" id="demo" lay-filter="test" />
+            </div>
+        </div>
+    </div>
+</div>
+<script src="__JS__/xcity.js"></script>
+<script type="text/javascript">
+
+    layui.use(['form','code'], function(){
+        form = layui.form;
+
+        layui.code();
+
+        $('#x-city').xcity('安徽','滁州市','琅琊区');
+
+    });
+    layui.use('table', function(){
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            ,height: 312
+//            ,url: '' //数据接口
+            ,data:[
+                {"code":0,"msg":"","count":1000,"data":[{"id":10000,"username":"user-0","sex":"女","city":"城市-0","sign":"签名-0","experience":255,"logins":24,"wealth":82830700,"classify":"作家","score":57},{"id":10001,"username":"user-1","sex":"男","city":"城市-1","sign":"签名-1","experience":884,"logins":58,"wealth":64928690,"classify":"词人","score":27},{"id":10002,"username":"user-2","sex":"女","city":"城市-2","sign":"签名-2","experience":650,"logins":77,"wealth":6298078,"classify":"酱油","score":31},{"id":10003,"username":"user-3","sex":"女","city":"城市-3","sign":"签名-3","experience":362,"logins":157,"wealth":37117017,"classify":"诗人","score":68},{"id":10004,"username":"user-4","sex":"男","city":"城市-4","sign":"签名-4","experience":807,"logins":51,"wealth":76263262,"classify":"作家","score":6},{"id":10005,"username":"user-5","sex":"女","city":"城市-5","sign":"签名-5","experience":173,"logins":68,"wealth":60344147,"classify":"作家","score":87},{"id":10006,"username":"user-6","sex":"女","city":"城市-6","sign":"签名-6","experience":982,"logins":37,"wealth":57768166,"classify":"作家","score":34},{"id":10007,"username":"user-7","sex":"男","city":"城市-7","sign":"签名-7","experience":727,"logins":150,"wealth":82030578,"classify":"作家","score":28},{"id":10008,"username":"user-8","sex":"男","city":"城市-8","sign":"签名-8","experience":951,"logins":133,"wealth":16503371,"classify":"词人","score":14},{"id":10009,"username":"user-9","sex":"女","city":"城市-9","sign":"签名-9","experience":484,"logins":25,"wealth":86801934,"classify":"词人","score":75},{"id":10010,"username":"user-10","sex":"女","city":"城市-10","sign":"签名-10","experience":1016,"logins":182,"wealth":71294671,"classify":"诗人","score":34},{"id":10011,"username":"user-11","sex":"女","city":"城市-11","sign":"签名-11","experience":492,"logins":107,"wealth":8062783,"classify":"诗人","score":6},{"id":10012,"username":"user-12","sex":"女","city":"城市-12","sign":"签名-12","experience":106,"logins":176,"wealth":42622704,"classify":"词人","score":54},{"id":10013,"username":"user-13","sex":"男","city":"城市-13","sign":"签名-13","experience":1047,"logins":94,"wealth":59508583,"classify":"诗人","score":63},{"id":10014,"username":"user-14","sex":"男","city":"城市-14","sign":"签名-14","experience":873,"logins":116,"wealth":72549912,"classify":"词人","score":8},{"id":10015,"username":"user-15","sex":"女","city":"城市-15","sign":"签名-15","experience":1068,"logins":27,"wealth":52737025,"classify":"作家","score":28},{"id":10016,"username":"user-16","sex":"女","city":"城市-16","sign":"签名-16","experience":862,"logins":168,"wealth":37069775,"classify":"酱油","score":86},{"id":10017,"username":"user-17","sex":"女","city":"城市-17","sign":"签名-17","experience":1060,"logins":187,"wealth":66099525,"classify":"作家","score":69},{"id":10018,"username":"user-18","sex":"女","city":"城市-18","sign":"签名-18","experience":866,"logins":88,"wealth":81722326,"classify":"词人","score":74},{"id":10019,"username":"user-19","sex":"女","city":"城市-19","sign":"签名-19","experience":682,"logins":106,"wealth":68647362,"classify":"词人","score":51},{"id":10020,"username":"user-20","sex":"男","city":"城市-20","sign":"签名-20","experience":770,"logins":24,"wealth":92420248,"classify":"诗人","score":87},{"id":10021,"username":"user-21","sex":"男","city":"城市-21","sign":"签名-21","experience":184,"logins":131,"wealth":71566045,"classify":"词人","score":99},{"id":10022,"username":"user-22","sex":"男","city":"城市-22","sign":"签名-22","experience":739,"logins":152,"wealth":60907929,"classify":"作家","score":18},{"id":10023,"username":"user-23","sex":"女","city":"城市-23","sign":"签名-23","experience":127,"logins":82,"wealth":14765943,"classify":"作家","score":30},{"id":10024,"username":"user-24","sex":"女","city":"城市-24","sign":"签名-24","experience":212,"logins":133,"wealth":59011052,"classify":"词人","score":76},{"id":10025,"username":"user-25","sex":"女","city":"城市-25","sign":"签名-25","experience":938,"logins":182,"wealth":91183097,"classify":"作家","score":69},{"id":10026,"username":"user-26","sex":"男","city":"城市-26","sign":"签名-26","experience":978,"logins":7,"wealth":48008413,"classify":"作家","score":65},{"id":10027,"username":"user-27","sex":"女","city":"城市-27","sign":"签名-27","experience":371,"logins":44,"wealth":64419691,"classify":"诗人","score":60},{"id":10028,"username":"user-28","sex":"女","city":"城市-28","sign":"签名-28","experience":977,"logins":21,"wealth":75935022,"classify":"作家","score":37},{"id":10029,"username":"user-29","sex":"男","city":"城市-29","sign":"签名-29","experience":647,"logins":107,"wealth":97450636,"classify":"酱油","score":27}]}
+            ]
+            ,page: true //开启分页
+//            , count: 1000
+//            , limit: 14
+            ,cols: [[ //表头
+                {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
+                ,{field: 'username', title: '姓名', width:80}
+                ,{field: 'sex', title: '性别', width:80, sort: true}
+                ,{field: 'city', title: '职称', width:80}
+                ,{field: 'sign', title: '年龄', width: 80, sort: true}
+                ,{field: 'experience', title: '积分', width: 80, sort: true}
+                ,{field: 'score', title: '评分', width: 80, sort: true}
+                ,{field: 'classify', title: '职业', width: 80}
+                ,{field: 'wealth', title: '财富', width: 135, sort: true}
+            ]]
+        });
+
+    });
+
+</script>
+
+
+
+
+
+</body>
+</html>

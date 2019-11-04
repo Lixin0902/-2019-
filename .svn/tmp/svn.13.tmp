@@ -1,0 +1,174 @@
+<?php
+// +----------------------------------------------------------------------
+// | ThinkPHP [ WE CAN DO IT JUST THINK ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2006-2016 http://thinkphp.cn All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+// +----------------------------------------------------------------------
+// | Author: 流年 <liu21st@gmail.com>
+// +----------------------------------------------------------------------
+
+// 应用公共文件
+
+//  应用常量
+use app\xt\model\Area;
+use app\xt\model\BaseCode;
+use think\Request;
+use think\Session;
+
+define('PHPSESSID', 'PHPSESSID'); //sessionID Cookie name in php
+/**
+ * 用户登录的session key
+ */
+define('LOGIN_MARK_SESSION_KEY', '_XT_USER_SESSION');
+define('IN_USE', 1);
+define('YES', 1);
+define('NO', 0);
+define('NOT_USE', 0);
+
+/**
+ * 接口返回数据格式
+ * @param int $code 状态码 200=正常 400=访问错误 401=权限错误
+ * @param string $msg 返回信息
+ * @param array $data 返回的data数据
+ * @param int $json_option json格式 默认为 0 不需要修改.
+ * @return \think\response\Json
+ */
+function returnJson($code, $msg = '', $data = [], $json_option = 0)
+{
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE");
+//    $returnJson = array('code' => $code, 'msg' => $msg, 'data' => $data,'count'=>$count);
+    $returnJson = array('code' => $code, 'msg' => $msg, 'data' => $data);
+    echo json_encode($returnJson, $json_option);
+    exit();
+}
+
+
+/**
+ * 判断当前session是否已经登录,如果已经登录则返回User,否则返回null
+ * @author 谢灿 2019-6-19
+ * @return bool 登录返回true 未登录返回false;
+ */
+function isLogin()
+{
+    $user = Session::get(LOGIN_MARK_SESSION_KEY);
+    return isset($user);
+}
+
+/**
+ * 获取Session当前登录用户
+ * @author 谢灿 2019-6-19
+ * @return array $user 当前登录的用户信息
+ */
+function getLoginedUser()
+{
+    $user = Session::get(LOGIN_MARK_SESSION_KEY);
+    if (!isset($user)) {
+        $request = Request::instance();
+        if ($request->isAjax()) {
+            returnJson(401, 'error 401! Please login first.');
+        } else {
+            //重定向至登录页面
+            header('Location: login');
+            exit();
+        }
+    } else {
+        return $user;
+    }
+}
+
+/**
+ * 图片上传
+ * @return string 图片存储路径
+ * @author 崔同海
+ * @data 2019/6/20 08:56
+*/
+function pictureUpload(){
+    $request=Request::instance();
+    $picture=$request->file('picture');
+    if ($picture){
+        $picture_position=$picture->move(ROOT_PATH.'public'.DS.'static'.DS.'picture'.DS.'upload');
+        if ($picture_position){
+            return DS.'expert_database\public\static\picture\upload\\'.$picture_position->getSaveName();
+        }
+        else{
+            return $picture->getError();
+        }
+    }
+}
+
+/**
+ * 基础代码中文输出
+ * @param object $value
+ * @return object
+ * @author 崔同海
+ * @data 2019/7/4 11:47
+ */
+function expertName($value){
+    $country = $value['fk_area_id'];
+    $area = new Area();
+    $result_country = $area
+        ->field('dept_name as name,LEVEL_UP_KEYID as level_up')
+        ->where('keyid', $country)
+        ->find();
+    $city_id = $result_country['level_up'];
+    $result_city = $area
+        ->field('dept_name as name,LEVEL_UP_KEYID as level_up')
+        ->where('keyid', $city_id)
+        ->find();
+    $province_id = $result_city['level_up'];
+    $result_province = $area
+        ->field('dept_name as name')
+        ->where('keyid', $province_id)
+        ->find();
+    $province_res = $result_province['name'];
+    $city_res = $result_city['name'];
+    $country_res = $result_country['name'];
+    $value['fk_area_id'] = $province_res . $city_res . $country_res;
+
+    $base_code = new BaseCode();
+    $second_profession=$value['fk_code_profession_id'];
+    $result_second_profession=$base_code
+        ->field('para_name as name,parent_ID as parent_id')
+        ->where('key_id', $second_profession)
+        ->find();
+    $first_profession=$result_second_profession['parent_id'];
+    $result_first_profession= $base_code
+        ->field('para_name as name')
+        ->where('key_id', $first_profession)
+        ->find();
+    $value['fk_code_profession_id']=$result_first_profession['name'].$result_second_profession['name'];
+
+    $fk_code_gender_id = $value['fk_code_gender_id'];
+    $result_fk_code_gender_id = $base_code
+        ->field('para_name as name')
+        ->where('Key_Id', $fk_code_gender_id)
+        ->find();
+    $value['fk_code_gender_id'] = $result_fk_code_gender_id['name'];
+
+    $fk_code_title_id = $value['fk_code_title_id'];
+    $result_fk_code_title_id = $base_code
+        ->field('para_name as name')
+        ->where('Key_Id', $fk_code_title_id)
+        ->find();
+    $value['fk_code_title_id'] = $result_fk_code_title_id['name'];
+
+    $fk_code_major_id = $value['fk_code_major_id'];
+    $result_fk_code_major_id = $base_code
+        ->field('para_name as name')
+        ->where('Key_Id', $fk_code_major_id)
+        ->find();
+    $value['fk_code_major_id'] = $result_fk_code_major_id['name'];
+
+    if ($value['is_senior'] == '1') {
+        $value['is_senior'] = '是';
+    } else
+        $value['is_senior'] = '否';
+    return $value;
+}
+
+/**
+ * word文档导出
+ */

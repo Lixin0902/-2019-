@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户信息编辑</title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/xadmin.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/font.css">
+    <script src="__JS__/jquery.min.js"></script>
+    <script src="__layUI__/layui.js"></script>
+    <script src="__JS__/xadmin.js"></script>
+</head>
+<body>
+<div class="x-body">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label for="account" class="layui-form-label">
+                <span class="x-red">*</span>账号
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="account" name="account" required lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="password" class="layui-form-label">
+                <span class="x-red">*</span>密码
+            </label>
+            <div class="layui-input-inline">
+                <input type="password" id="password" name="password" placeholder="请输入新密码且不少于6位"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">若要修改密码此项必填，不填则默认原来密码</span>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="name" class="layui-form-label">
+                <span class="x-red">*</span>姓名
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="name" name="name" lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="nick_name" class="layui-form-label">
+                <span class="x-red">*</span>昵称
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="nick_name" name="nick_name" lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+            </label>
+            <button class="layui-btn" lay-filter="add" lay-submit="" style="background-color: #FF5722;">
+                确认更改此用户信息
+            </button>
+        </div>
+    </form>
+
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        var parent_json = eval('(' + parent.json + ')');
+        $("#account").val(parent_json.user_account);
+        $("#name").val(parent_json.name);
+        $("#nick_name").val(parent_json.nick_name);
+    });
+
+    layui.use(['form', 'layer'], function () {
+        $ = layui.jquery;
+        var form = layui.form
+                , layer = layui.layer;
+        //监听提交
+        form.on('submit(add)', function (data) {
+            console.log(data);
+            var parent_json = eval('(' + parent.json + ')');
+            var key_id = parent_json.key_id;
+            //发异步，把数据提交给php
+            $.ajax({
+                url: '__ROOT__/xt/users/' + key_id,
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    _method: 'PUT',
+                    account: data.field.account,
+                    password: data.field.password,
+                    name: data.field.name,
+                    nick_name: data.field.nick_name
+                },
+                success: function (data) {
+                    var returnCode = data.code;
+                    if (returnCode == 200) {
+                        layer.closeAll('loading');
+                        layer.load(2);
+                        layer.msg("修改成功", {icon: 6});
+                        setTimeout(function () {
+                            window.parent.location.reload();//修改成功后刷新父界面
+                        }, 1000);
+                    } else {
+                        console.log(returnCode);
+                        layer.msg("修改失败，请检查信息是否符合要求", {icon: 5});
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

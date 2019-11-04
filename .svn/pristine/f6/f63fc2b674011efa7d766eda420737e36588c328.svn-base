@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>后台登录</title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/xadmin.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/font.css">
+    <script src="__JS__/jquery.min.js"></script>
+    <script src="__layUI__/layui.js"></script>
+    <script src="__JS__/xadmin.js"></script>
+</head>
+<body>
+<div class="x-body">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label for="username" class="layui-form-label">
+                <span class="x-red">*</span>姓名
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="username" name="username" required lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>性别
+            </label>
+            <div class="layui-input-inline">
+                <select name="sex">
+                    <option value="0">男</option>
+                    <option value="1">女</option>
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>职称
+            </label>
+            <div class="layui-input-inline">
+                <select name="sex">
+                    <option value="0">学士</option>
+                    <option value="1">硕士</option>
+                    <option value="2">博士</option>
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="age" class="layui-form-label">
+                <span class="x-red">*</span>年龄
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="age" name="username" required lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>所属行业
+            </label>
+            <div class="layui-input-inline">
+                <select name="sex">
+                    <option value="0">一级行业</option>
+                    <option value="1">二级行业</option>
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>从事专业
+            </label>
+            <div class="layui-input-inline">
+                <select name="sex">
+                    <option value="0">技术类</option>
+                    <option value="1">文职类</option>
+                    <option value="2">教育类</option>
+                    <option value="3">计算机</option>
+                    <option value="4">金融</option>
+                    <option value="5">建筑</option>
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>是否为资深专家
+            </label>
+            <div class="layui-input-inline">
+                <select name="sex">
+                    <option value="0">是</option>
+                    <option value="1">否</option>
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <button type="button" class="layui-btn" id="test1" >
+                <i class="layui-icon">&#xe67c;</i>上传资格证书图片
+            </button>
+        </div>
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+            </label>
+            <button  class="layui-btn" lay-filter="add" lay-submit="" style="background-color: #FF5722;">
+                添加
+            </button>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use(['form','layer', 'upload'], function(){
+        $ = layui.jquery;
+        var form = layui.form
+                ,layer = layui.layer
+                ,upload = layui.upload;
+        //监听提交
+        form.on('submit(add)', function(data){
+            console.log(data);
+            //发异步，把数据提交给php
+            layer.alert("增加成功", {icon: 6},function () {
+                // 获得frame索引
+                var index = parent.layer.getFrameIndex(window.name);
+                //关闭当前frame
+                parent.layer.close(index);
+            });
+            return false;
+        });
+        var uploadInst = upload.render({
+            elem: '#test1' //绑定元素
+            ,url: '/upload/' //上传接口
+            ,done: function(res){
+                //上传完毕回调
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+        });
+
+
+    });
+</script>
+</body>
+</html>

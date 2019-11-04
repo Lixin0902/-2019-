@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>组织机构和地区管理</title>
+    <link rel="stylesheet" type="text/css" href="__layUI__/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/xadmin.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/font.css">
+    <script src="__JS__/jquery.min.js"></script>
+    <!--<script src="__layUI__/layui.js"></script>-->
+    <script src="__JS__/xadmin.js"></script>
+</head>
+<body>
+<div>
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input type="text" id="codename" name="" placeholder="请输入组织机构名称" autocomplete="off" class="layui-input">
+            </div>
+            <button class="layui-btn" id="search" type="button" style="position: absolute;left: 207px;">查询</button>
+        </div>
+    </form>
+    <xblock>
+        <button class="layui-btn" onclick="x_admin_show('新增组织机构信息','adminOrgAdd')"><i
+                class="layui-icon"></i>新增组织机构信息
+        </button>
+    </xblock>
+
+    <table id="table2" class="layui-table" lay-filter="table2"></table>
+</div>
+
+
+<script src="__layUI__/layui.js"></script>
+<script type="text/javascript">
+    layui.use(['element','form'], function(){
+        element = layui.element;
+        form = layui.form;
+
+    });
+    layui.config({
+        base: '__CSS__/module/'
+    }).extend({
+        treetable: 'treetable-lay/treetable'
+    }).use(['layer', 'table', 'treetable'], function () {
+        var $ = layui.jquery;
+        var table = layui.table;
+        var layer = layui.layer;
+        var treetable = layui.treetable;
+
+        //        每行后面的操作栏功能实现
+        table.on('tool(table2)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            console.log(data);
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+            var checkStatus = table.checkStatus('table2');
+
+//            if (layEvent === 'detail') { //查看
+////                    var jsonstr = JSON.stringify(data);
+////                    layer.alert(jsonstr)
+////                x_admin_show('详细信息', 'expertInfoDetail')
+//
+//            } else
+            if (layEvent === 'del') { //删除
+                layer.confirm('确定要删除吗？', function (index) {
+                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    layer.close(index);
+//                    console.log(data.id)
+                    //向服务端发送删除指令
+                    $.ajax({
+                        url: "__ROOT__/xt/organises/" + data['key_id'],
+                        data: {
+                            '_method': 'delete'
+                        },
+                        type: "post",
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.code == 200) {
+                                console.log(data)
+                                layer.msg("删除成功");
+//                                location.reload();
+                            } else {
+                                layer.msg("删除失败");
+                            }
+                        }
+                    })
+                });
+            } else if (layEvent === 'edit') { //编辑
+                console.log(data);
+                json = JSON.stringify(data);
+                console.log(json)
+                layer.open({
+                    title: '编辑专家信息',
+                    type: 2,
+                    shade: false,
+                    maxmin: true,
+                    shade: 0.5,
+                    area: ['50%', '90%'],
+                    content: 'expertInfoEdit',
+                    zIndex: layer.zIndex,
+                    success : function(layero, index){
+                        var body = layui.layer.getChildFrame('body', index);
+                    },
+                    end: function () {
+//                            $(".layui-laypage-btn")[0].click();
+                    }
+                });
+//                    window.location.href="expertInfoEdit?name="+data.name;
+//                      x_admin_show('编辑', 'expertInfoEdit?name='+data.name+"&age="+data.age+'&is_senior='+data.is_senior+'&fk_code_gender_id='+data.fk_code_gender_id);
+            }
+        });
+
+
+        // 渲染表格
+        var topPid = 0;
+        var renderTable2 = function () {
+//            layer.load(2);
+//            layer.msg('因省市较多，请耐心等待',{
+//                icon:16,
+//                shade:0.01
+//            });
+
+            treetable.render({
+//                id: treetable2,
+                treeColIndex: 1,
+                treeSpid: topPid,
+                treeIdName: 'key_id',
+                treePidName: 'parent_id',
+                treeDefaultClose: true,
+                treeLinkage: false,
+                elem: '#table2',
+                url: "__ROOT__/xt/organises?limit=1&page=1",
+                page: false,
+                response: {
+                    statusCode: 200 //规定成功的状态码，默认：0
+//                    , countName: 'count' //规定数据总数的字段名称，默认：count
+                    , dataName: 'data' //规定数据列表的字段名称，默认：data
+                },
+                parseData: function (res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.status, //解析接口状态
+                        "msg": res.message, //解析提示文本
+//                    "count": res.count, //解析数据长度
+                        "data": res.data //解析数据列表
+                    }
+                },
+                cols: [[
+                    {type: 'numbers'},
+                    {field: 'key_id', title: 'ID'},
+                    {field: 'dept_name', title: '组织机构名'},
+//                    {field: 'code', title: '编号'},
+                    {field: 'level', title: '排序'},
+                    {fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo'}
+                ]],
+                done: function () {
+                    layer.closeAll('loading');
+                }
+            });
+
+        };
+        renderTable2();
+//        var $ = layui.$, active = {
+//            reload: function(){
+//                var demoReload = $('#demoReload');
+//
+//                //执行重载
+//                table.reload('testReload', {
+//                    page: {
+//                        curr: 1 //重新从第 1 页开始
+//                    }
+//                    ,where: {
+//                        key: {
+//                            id: demoReload.val()
+//                        }
+//                    }
+//                }, 'data');
+//            }
+//        };
+//
+//        $('.demoTable .layui-btn').on('click', function(){
+//            var type = $(this).data('type');
+//            active[type] ? active[type].call(this) : '';
+//        });
+
+        // 搜索按钮点击事件 根据输入内容突出显示符合条件的文本
+        $('#search').click(function () {
+            var keyword = $('#codename').val();
+            var $tds = $('#table2').next('.treeTable').find('.layui-table-body tbody tr td');
+            if (!keyword) {
+                $tds.css('background-color', 'transparent');
+                layer.msg("请输入关键字", {icon: 5});
+                return;
+            }
+            var searchCount = 0;
+            $tds.each(function () {
+                $(this).css('background-color', 'transparent');
+                if ($(this).text().indexOf(keyword) >= 0) {
+                    $(this).css('background-color', 'rgba(250,230,160,0.5)');
+                    if (searchCount == 0) {
+                        $('body,html').stop(true);//火狐 ie不支持body,谷歌支持的是body，所以为了兼容写body和html   stop()方法停止当前正在运行的动画
+                        $('body,html').animate({scrollTop: $(this).offset().top - 150}, 500);
+                    }
+                    searchCount++;
+                }
+            });
+            if (searchCount == 0) {
+                layer.msg("没有匹配结果", {icon: 5});
+            } else {
+                treetable.expandAll('#table2');
+            }
+        });
+
+    });
+
+</script>
+
+
+<!--地区表格操作按钮部分-->
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户添加</title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/xadmin.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/font.css">
+    <script src="__JS__/jquery.min.js"></script>
+    <script src="__layUI__/layui.js"></script>
+    <script src="__JS__/xadmin.js"></script>
+</head>
+<body>
+<div class="x-body">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label for="account" class="layui-form-label">
+                <span class="x-red">*</span>账号
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="account" name="account" required lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="password" class="layui-form-label">
+                <span class="x-red">*</span>密码
+            </label>
+            <div class="layui-input-inline">
+                <input type="password" id="password1" name="password1" lay-verify="required|pass" placeholder="密码不少于6位"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="password" class="layui-form-label">
+                <span class="x-red">*</span>确认密码
+            </label>
+            <div class="layui-input-inline">
+                <input type="password" id="password" name="password" lay-verify="required|pass|equal" placeholder="密码不少于6位"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="name" class="layui-form-label">
+                <span class="x-red">*</span>姓名
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="name" name="name" lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="nick_name" class="layui-form-label">
+                <span class="x-red">*</span>昵称
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="nick_name" name="nick_name" lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+            </label>
+            <button class="layui-btn" lay-filter="add" lay-submit="" style="background-color: #FF5722;">
+                添加此用户信息
+            </button>
+        </div>
+
+    </form>
+</div>
+<script>
+    layui.use(['form', 'layer'], function () {
+        $ = layui.jquery;
+        var form = layui.form
+                , layer = layui.layer;
+        //自定义验证规则
+        form.verify({
+            pass: [
+                /^[\S]{6,12}$/
+                , '密码必须6到12位，且不能出现空格'
+            ]
+            , equal: function (value, item) { //value：表单的值、item：表单的DOM对象
+                if (value != layui.$('input[name="password1"]').val()) {
+                    return '密码不相同请重新输入！'
+                }
+            }
+        });
+        //监听提交
+        form.on('submit(add)', function (data) {
+            //发异步，把数据提交给php
+            $.ajax({
+                url: '__ROOT__/xt/users',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    account: data.field.account,
+                    password: data.field.password,
+                    name: data.field.name,
+                    nick_name: data.field.nick_name
+                },
+                success: function (data) {
+                    var returnCode = data.code;
+                    if (returnCode == 200) {
+                        layer.closeAll('loading');
+                        layer.load(2);
+                        layer.msg("添加成功", {icon: 6});
+                        setTimeout(function () {
+                            window.parent.location.reload();//修改成功后刷新父界面
+                        }, 1000);
+                    } else {
+                        console.log(returnCode);
+                        layer.msg("添加失败，"+ data.msg, {icon: 5});
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

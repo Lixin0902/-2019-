@@ -1,0 +1,191 @@
+<?php
+
+namespace app\index\controller;
+
+use app\xt\controller\BaseController;
+use app\xt\model\Area;
+use app\xt\model\BaseCode;
+use think\Request;
+use app\index\model\ExpertInformation as ExpertInfo;
+
+/**
+ * 用于实现专家信息相关功能
+ * @package app\index\controller
+ * @author 谢灿
+ * @data 2019年6月17日
+ */
+class ExpertInformation extends BaseController
+{
+    /**
+     * 专家列表显示
+     * @auth 崔同海 2019-6-22
+     * @param Request $request
+     * @param int $page
+     * @param int $limit
+     * @return \think\Response
+     * @throws \Exception
+     */
+    public function index(Request $request, $page = 1, $limit = 10)
+    {
+        $param=$request->param();
+        try{
+            $expertInfo=new ExpertInfo();
+            $data=$expertInfo->listExpert($param,$page,$limit);
+            foreach ($data as $key => $value){
+                $country=$value['fk_area_id'];
+                $area=new Area();
+                $result_country=$area
+                    ->field('dept_name as name,LEVEL_UP_KEYID as level_up')
+                    ->where('keyid',$country)
+                    ->find();
+                $city_id=$result_country['level_up'];
+                $result_city=$area
+                    ->field('dept_name as name,LEVEL_UP_KEYID as level_up')
+                    ->where('keyid',$city_id)
+                    ->find();
+                $province_id=$result_city['level_up'];
+                $result_province=$area
+                    ->field('dept_name as name')
+                    ->where('keyid',$province_id)
+                    ->find();
+                $province_res=$result_province['name'];
+                $city_res=$result_city['name'];
+                $country_res=$result_country['name'];
+                $value['fk_area_id']=$province_res.$city_res.$country_res;
+
+                $fk_code_gender_id=$value['fk_code_gender_id'];
+                $base_code=new BaseCode();
+                $result_fk_code_gender_id=$base_code
+                    ->field('para_name as name')
+                    ->where('Key_Id',$fk_code_gender_id)
+                    ->find();
+                $value['fk_code_gender_id']=$result_fk_code_gender_id['name'];
+
+                $fk_code_title_id=$value['fk_code_title_id'];
+                $result_fk_code_title_id=$base_code
+                    ->field('para_name as name')
+                    ->where('Key_Id',$fk_code_title_id)
+                    ->find();
+                $value['fk_code_title_id']=$result_fk_code_title_id['name'];
+
+                $fk_code_major_id=$value['fk_code_major_id'];
+                $result_fk_code_major_id=$base_code
+                    ->field('para_name as name')
+                    ->where('Key_Id',$fk_code_major_id)
+                    ->find();
+                $value['fk_code_major_id']=$result_fk_code_major_id['name'];
+
+               if ($value['is_senior']=='1'){
+                   $value['is_senior']='是';
+               }
+               else
+                   $value['is_senior']='否';
+            }
+        }catch (\Exception $e){
+            throw $e;
+        }
+        return $this->returnJson(200,'查询成功',$data);
+    }
+
+    /**
+     * 显示创建资源表单页.
+     *
+     * @return \think\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * 新增专家信息
+     * @auth 崔同海 2019-6-20
+     * @param  \think\Request $request
+     * @return \think\Response
+     * @throws \Exception
+     */
+    public function save(Request $request)
+    {
+        $data=$request->param();
+        $data['picture']=pictureUpload();
+        $user = getLoginedUser();
+        $data['operate_id']=$user->key_id;
+        $data['operate_name']=$user->name;
+        try{
+            $result=ExpertInfo::create($data);
+        }catch (\Exception $e){
+            throw $e;
+        }
+        return $this->returnJson(200,'用户添加成功',$data);
+    }
+
+    /**
+     * 指定专家信息查询
+     *
+     * @param  int $id
+     * @return \think\Response
+     * @throws \Exception
+     */
+    public function read($id)
+    {
+        try{
+            $data=ExpertInfo::get($id);
+        }catch (\Exception $e) {
+            throw $e;
+        }
+        return $this->returnJson(200,'专家信息查询成功',$data);
+    }
+
+    /**
+     * 显示编辑资源表单页.
+     *
+     * @param  int  $id
+     * @return \think\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * 编辑专家信息（更新）
+     * @auth 崔同海 2019-6-20
+     * @param  \think\Request $request
+     * @param  int $id
+     * @return \think\Response
+     * @throws \Exception
+     */
+    public function update(Request $request, $id)
+    {
+        $data = $request->param();
+        $data['picture']=pictureUpload();
+        $user = getLoginedUser();
+        $data['operate_id']=$user->key_id;
+        $data['operate_name']=$user->name;
+        try{
+            $result = ExpertInfo::update($data, ["key_id" => $id],true);
+        }catch (\Exception $e){
+            throw $e;
+        }
+        return $this->returnJson(200,'用户更新成功',$data);
+    }
+
+    /**
+     * 专家信息删除
+     * @auth 崔同海 2019-6-22
+     * @param  int $id
+     * @return \think\Response
+     * @throws \Exception
+     */
+    public function delete($id)
+    {
+        try{
+            $infoModel = new ExpertInfo();
+            $infoModel->certificates()->where('fk_expert_info_id', $id)->delete();
+            $infoModel -> where('key_id', $id)->delete();
+        }catch (\Exception $e){
+            throw $e;
+        }
+        return $this->returnJson(200,'专家信息及相关资格证书删除成功','');
+    }
+}

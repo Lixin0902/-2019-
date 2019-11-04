@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户信息</title>
+    <link rel="stylesheet" type="text/css" href="__layUI__/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/xadmin.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/font.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/layer.css">
+</head>
+<body class="form-wrap">
+<script src="__JS__/jquery.min.js"></script>
+<script src="__layUI__/layui.js"></script>
+<script src="__JS__/xadmin.js"></script>
+<script type="text/javascript">
+    /**
+     * 初始渲染
+     */
+    $(document).ready(function () {
+        getTable();
+    });
+    /**
+     * 获取表格信息
+     */
+    function getTable() {
+        var name = $("#codename").val();
+        layui.use('table', function () {
+            var table = layui.table,
+                    $ = layui.jquery;
+//      表格渲染函数
+            var demoIns = table.render({
+                elem: '#demo'
+                , method: 'Get'
+                , height: 'full-200'
+                , url: '__ROOT__/xt/users?name=' + name
+                , page: true
+                ,limits: [5, 10, 15,20] //显示
+                ,limit: 10 //每页默认显示的数量
+                , async: true
+                , id: 'demoTable'/* 重载表格时要用到的id ,最好别和标签的id一样*/
+                , response: {
+                    statusName: 'code',
+                    statusCode: 200 //规定成功的状态码，默认：0
+                    , countName: 'count' //规定数据总数的字段名称，默认：count
+                    , dataName: 'data' //规定数据列表的字段名称，默认：data
+                    ,msgName: 'msg'
+                }
+                , parseData: function (res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.code, //解析接口状态
+                        "msg": res.msg, //解析提示文本
+                        "count": res.count, //解析数据长度
+                        "data": res.data //解析数据列表
+                    }
+                }
+                , cols: [[ //表头
+                    {checkbox: true, fixed: true}
+                    , {field: 'key_id', title: 'ID', sort: true, width: 60}
+                    , {field: 'user_account', title: '账号'}
+                    , {field: 'nick_name', title: '昵称'}
+                    , {field: 'name', title: '用户姓名'}
+                    , {fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo', width: 202}
+                ]]
+            });
+
+            layui.use('layer', function () {
+                layer = layui.layer;
+            });
+//        每行后面的操作栏功能实现
+            table.on('tool(user)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                console.log(data);
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                var tr = obj.tr; //获得当前行 tr 的DOM对象
+                var checkStatus = table.checkStatus('demo');
+                if (layEvent === 'del') { //删除
+                    layer.confirm('确定要删除吗？', function (index) {
+                        layer.close(index);
+                        //向服务端发送删除指令
+                        $.ajax({
+                            url: "__ROOT__/xt/users/" + data['key_id'],
+                            data: {
+                                '_method': 'delete'
+                            },
+                            type: "post",
+                            dataType: 'json',
+                            success: function (data) {
+                                if (data.code == 200) {
+                                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                                    console.log(data)
+                                    layer.msg("删除成功");
+                                } else {
+                                    layer.msg("删除失败");
+                                }
+                            }
+                        })
+                    });
+                } else if (layEvent === 'edit') { //编辑
+                    console.log(data);
+                    json = JSON.stringify(data);
+                    console.log(json)
+                    layer.open({
+                        title: '编辑用户信息',
+                        type: 2,
+                        shade: false,
+                        maxmin: true,
+                        shade: 0.5,
+                        scrollbar: false,   //阻止屏幕滚动条滚动
+                        area: ['50%', '90%'],
+                        content: 'adminEdit',
+                        zIndex: layer.zIndex,
+                        success: function (layero, index) {
+                            var body = layui.layer.getChildFrame('body', index);
+                        }
+                    });
+                }
+            });
+
+//        实现批量删除
+            $(".delAll_btn").click(function () {
+                var checkStatus = table.checkStatus('demoTable'),
+                        data = checkStatus.data,
+                        employeesId = "";
+                console.log(data)
+                if (data.length > 0) {
+                    layer.confirm('确定要删除这' + data.length + '条数据吗？', function () {
+                        for (var i = 0; i < data.length; i++) {
+                            employeesId = data[i].key_id;
+                            console.log(employeesId);
+                            function ddd() {
+                                $.ajax({
+                                    url: "__ROOT__/xt/users/" + employeesId,
+                                    data: {
+                                        '_method': 'delete'
+                                    },
+                                    type: "post",
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        if (data.code == 200) {
+                                            console.log(data)
+                                        } else {
+                                            layer.msg("删除失败");
+                                        }
+                                    }
+                                })
+                            }
+
+                            ddd();
+                            layer.msg("删除成功");
+                            demoIns.reload();
+                        }
+                    })
+                } else {
+                    layer.msg('请选择需要删除的数据');
+                }
+            })
+        });
+    }
+
+//    添加回车事件，输入后，按回车即可查询
+    document.onkeydown=function(event) {
+        e = event ? event :(window.event ? window.event : null);
+        if(e.keyCode==13){
+//执行的方法
+//            alert('回车检测到了');
+            getTable();
+            return false;
+        }
+    }
+
+
+</script>
+
+<script>
+    layui.use(['form', 'code'], function () {
+        form = layui.form;
+        layui.code();
+    });
+</script>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">用户信息</div>
+        <div class="layui-card-body" style="padding: 15px;">
+            <form class="layui-form  x-so">
+                <input type="text" name="codename" id="codename" placeholder="请输入用户姓名或昵称" autocomplete="off"
+                       class="layui-input">
+                <button type="button" class="layui-btn" id="search" onclick="getTable()" style="margin-left: 5px;"><i
+                        class="layui-icon">查询</i>
+                </button>
+                <button class="layui-btn" style=""><i
+                        class="layui-icon layui-icon-refresh-1">重置</i>
+                </button>
+            </form>
+
+            <div class="x-body">
+                <xblock>
+                    <button class="layui-btn layui-btn-danger delAll_btn"><i class="layui-icon"></i>批量删除</button>
+                    <button class="layui-btn" onclick="x_admin_show('添加用户信息','adminAdd')"><i
+                            class="layui-icon"></i>添加
+                    </button>
+                </xblock>
+                <table class="layui-table" id="demo" lay-filter="user"/>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="__JS__/xcity.js"></script>
+
+<script type="text/html" id="barDemo">
+    <!--<a class="layui-btn layui-btn-xs" lay-event="detail" style="background-color: #dddddd;color: black;">查看</a>-->
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+</body>
+</html>

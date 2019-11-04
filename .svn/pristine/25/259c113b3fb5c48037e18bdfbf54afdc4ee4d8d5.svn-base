@@ -1,0 +1,41 @@
+<?php
+/**
+ * Created by IntelliJ IDEA.
+ * User: Can Xie
+ * Date: 2019-7-9
+ * Time: 9:19
+ */
+
+namespace app\index\controller;
+
+
+use app\xt\controller\BaseController;
+
+/**
+ * 专家统计分析接口控制器
+ * Class ExpertAnalysis
+ * @package app\index\controller
+ */
+class ExpertAnalysis extends BaseController
+{
+    /**
+     *
+     *    职称统计分析
+     *    可以按照专家的职称进行统计分析
+     *
+     *    性别统计分析
+     *    可以按照专家的性别进行统计分析
+     *
+     *    年龄段统计分析
+     *    可以按照专家的年龄段进行统计分析
+     *
+     *    所属行业统计分析
+     *   可以按照专家的所属行业进行统计分析
+     *
+     *    从事专业统计分析
+     *    可以按照专家的从事专业进行统计分析
+     *
+     *    地区统计分析
+     *    可以按照专家所在地区（精确到区县）进行统计分析
+     */
+}

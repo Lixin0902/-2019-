@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>专家信息</title>
+    <link rel="stylesheet" type="text/css" href="__layUI__/css/layui.css">
+    <!--<link rel="stylesheet" type="text/css" href="__CSS__/expert_info_list.css">-->
+    <link rel="stylesheet" type="text/css" href="__CSS__/xadmin.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/font.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/layer.css">
+</head>
+
+<!--包含内容:-->
+<!--专家信息列表, 查询,新增,编辑,删除,导出-->
+<body class="form-wrap">
+<script src="__JS__/jquery.min.js"></script>
+<script src="__layUI__/layui.js"></script>
+<script src="__JS__/xadmin.js"></script>
+<script type="text/javascript">
+    /**
+     * 初始渲染
+     */
+    $(document).ready(function () {
+        getTable();
+    });
+    /**
+     * 获取表格信息
+     */
+    function getTable() {
+        var name = $("#name").val();
+        layui.use('table', function () {
+            var table = layui.table,
+                    $ = layui.jquery;
+            //第一个实例
+            var demoIns= table.render({
+                elem: '#demo'
+                , method: 'Get'
+                , height: 'full-200'
+                , url: 'http://localhost:8088/chzu/public/experInfo?name='+name
+                , page: true
+                , async: true
+                , id: 'demoTable'/* 重载表格时要用到的id ,最好别和标签的id一样*/
+                , response: {
+                    statusCode: 200 //规定成功的状态码，默认：0
+                    , countName: 'count' //规定数据总数的字段名称，默认：count
+                    , dataName: 'data' //规定数据列表的字段名称，默认：data
+                }
+                , parseData: function (res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.status, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.count, //解析数据长度
+                        "data": res.data //解析数据列表
+                    }
+                }
+                , cols: [[ //表头
+                    {checkbox: true, fixed: true}
+                    , {field: 'key_id', title: 'ID', sort: true, width: 60}
+                    , {field: 'name', title: '姓名'}
+                    , {field: 'fk_code_gender_id', title: '性别', sort: true}
+                    , {field: 'title_certificate_code', title: '职称'}
+                    , {field: 'age', title: '年龄', sort: true}
+                    , {field: 'fk_code_profession_id', title: '所属行业'}
+                    , {field: 'fk_code_major_id', title: '从事专业'}
+                    , {field: 'is_senior', title: '是否为资深专家', minWidth: 130}
+                    , {field: 'fk_area_id', title: '所在地区', sort: true}
+                    , {fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo', minWidth: 182}
+                ]]
+            });
+
+
+            // 点击获取数据
+            //根据条件查询表格数据重新加载
+
+            layui.use('layer', function () {
+                layer = layui.layer;
+            });
+//        每行后面的操作栏功能实现
+            table.on('tool(user)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                console.log(data);
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                var tr = obj.tr; //获得当前行 tr 的DOM对象
+                var checkStatus = table.checkStatus('demo');
+
+                if (layEvent === 'detail') { //查看
+//                x_admin_show('详细信息', 'expertInfoDetail')
+                    layer.open({
+                        type: 1,
+                        title: '详细信息',
+                        area: '1000px',
+                        content: '<table class="layui-table">' +
+                        '<thead>' +
+                        '<tr>' +
+                        '<th>' + '<b>' + '条件' + '</b>' + '</th>' +
+                        '<th>' + '<b>' + '信息' + '</b>' + '</th>' +
+                        '<th>' + '<b>' + '条件' + '</b>' + '</th>' +
+                        '<th>' + '<b>' + '信息' + '</b>' + '</th>' +
+                        '</thead>' +
+                        '<tbody>' +
+                        '<tr>' +
+                        '<td>' + '姓名' + '</td>' +
+                        '<td>' + data.name + '</td>' +
+                        '<td rowspan="4">' + '个人照片' + '</td>' +
+                        '<td rowspan="4">' + '放照片处' + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>' + '性别' + '</td>' +
+                        '<td>' + data.fk_code_gender_id + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>' + '职务' + '</td>' +
+                        '<td>' + data.position + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>' + '年龄' + '</td>' +
+                        '<td>' + data.age + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>' + '所属行业' + '</td>' +
+                        '<td>' + data.fk_code_profession_id + '</td>' +
+                        '<td>' + '从事专业' + '</td>' +
+                        '<td>' + data.fk_code_major_id + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>' + '是否为资深专家' + '</td>' +
+                        '<td>' + data.is_senior + '</td>' +
+                        '<td>' + '所在地' + '</td>' +
+                        '<td>' + data.province + data.city + data.area + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>' + '开户行' + '</td>' +
+                        '<td>' + data.fk_code_bank_type_id + '</td>' +
+                        '<td>' + '银行账户' + '</td>' +
+                        '<td>' + data.bank_code + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>' + '证件类型' + '</td>' +
+                        '<td>' + data.fk_certificate_type_id + '</td>' +
+                        '<td>' + '证件号码' + '</td>' +
+                        '<td>' + data.cerificate_code + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>' + '是否为应急专家' + '</td>' +
+                        '<td>' + data.is_emergency + '</td>' +
+                        '<td>' + '是否培训' + '</td>' +
+                        '<td>' + data.is_trained + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>' + '政治面貌' + '</td>' +
+                        '<td>' + data.fk_code_politics_status_id + '</td>' +
+                        '<td>' + '出生日期' + '</td>' +
+                        '<td>' + data.birthday + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>' + '社会保障卡号' + '</td>' +
+                        '<td>' + data.fk_code_politics_status_id + '</td>' +
+                        '<td>' + '最高学位' + '</td>' +
+                        '<td>' + data.fk_code_highest_degree_id + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>' + '职称证书号' + '</td>' +
+                        '<td>' + data.fk_code_title_id + '</td>' +
+                        '<td>' + '职称证书号' + '</td>' +
+                        '<td>' + data.title_certificate_code + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>' + '第一学历' + '</td>' +
+                        '<td>' + data.fk_code_first_education_id + '</td>' +
+                        '<td>' + '第一学历毕业院校及专业' + '</td>' +
+                        '<td>' + data.first_graduate_school_and_major + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>' + '最高学历' + '</td>' +
+                        '<td>' + data.fk_code_highest_education_id + '</td>' +
+                        '<td>' + '最高学历毕业院校及专业' + '</td>' +
+                        '<td>' + data.highest_graduate_school_and_major + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>' + '从事专业年限' + '</td>' +
+                        '<td>' + data.marjor_age + '</td>' +
+                        '<td>' + '工龄' + '</td>' +
+                        '<td>' + data.working_age + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>' + '所属单位' + '</td>' +
+                        '<td>' + data.fk_org_id + '</td>' +
+                        '<td>' + '所属区域' + '</td>' +
+                        '<td>' + data.fk_area_id + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>' + '移动电话' + '</td>' +
+                        '<td>' + data.phone + '</td>' +
+                        '<td>' + '家庭住址' + '</td>' +
+                        '<td>' + data.address + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>' + '家庭邮编' + '</td>' +
+                        '<td>' + data.post_code + '</td>' +
+                        '<td>' + '电子邮箱' + '</td>' +
+                        '<td>' + data.email_address + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td rowspan="3">' + '专业技术特长' + '</td>' +
+                        '<td colspan="3" rowspan="3">' + data.post_code + '</td>' +
+                        '</tr>' +
+                        '</tbody>' +
+                        '</table>'
+                    })
+                } else if (layEvent === 'del') { //删除
+                    layer.confirm('确定删除吗？', function (index) {
+                        obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                        layer.close(index);
+//                    console.log(data.id)
+                        //向服务端发送删除指令
+                        $.ajax({
+                            url: "http://localhost:8088/chzu/public/experInfo/" + data['key_id'],
+                            data: {
+                                '_method': 'delete'
+                            },
+                            type: "post",
+                            dataType: 'json',
+                            success: function (data) {
+                                if (data.code == 200) {
+                                    console.log(data)
+                                    layer.msg("删除成功");
+//                                location.reload();
+                                } else {
+                                    layer.msg("删除失败");
+                                }
+                            }
+                        })
+                    });
+                } else if (layEvent === 'edit') { //编辑
+                    console.log(data);
+//                    window.location.href="expertInfoEdit?name="+data.name;
+                      x_admin_show('编辑', 'expertInfoEdit?name='+data.name+"&age="+data.age);
+                }
+            });
+
+//        实现批量删除
+            $(".delAll_btn").click(function () {
+                var checkStatus = table.checkStatus('demoTable'),
+                        data = checkStatus.data,
+                        employeesId = "";
+                console.log(data)
+                if (data.length > 0) {
+                    layer.confirm('确定全部删除吗？', function () {
+                        for (var i = 0; i < data.length; i++) {
+                            employeesId = data[i].key_id;
+                            console.log(employeesId);
+                            function ddd() {
+                                $.ajax({
+                                    url: "http://localhost:8088/chzu/public/experInfo/" + employeesId,
+                                    data: {
+                                        '_method': 'delete'
+                                    },
+                                    type: "post",
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        if (data.code == 200) {
+                                            console.log(data)
+//                                        layer.msg("删除成功");
+//                                location.reload();
+//                                        demoIns.reload();
+                                        } else {
+                                            layer.msg("删除失败");
+                                        }
+                                    }
+                                })
+                            }
+
+                            ddd();
+                            layer.msg("删除成功");
+                            demoIns.reload();
+                        }
+                    })
+                } else {
+                    layer.msg('请选择需要删除的数据');
+                }
+            })
+        });
+    };
+</script>
+
+<script type="text/javascript" src="__JS__/xcity.js"></script>
+<script>
+    layui.use(['form','code'], function(){
+        form = layui.form;
+
+        layui.code();
+
+        $('#x-city').xcity('安徽','滁州市','琅琊区');
+
+    });
+    </script>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">专家信息</div>
+        <div class="layui-card-body" style="padding: 15px;">
+            <form class="layui-form  x-so">
+                <label class="layui-form-label">个人信息：</label>
+                <input type="text" name="name" id="name" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+                <div class="layui-input-inline">
+                    <select id="sex" name="sex" lay-verify="">
+                        <option value="">请选择性别</option>
+                        <option value="0">男</option>
+                        <option value="1">女</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="professional">
+                        <option value="">请选择职称</option>
+                        <option value="0">学士</option>
+                        <option value="1">硕士</option>
+                        <option value="2">博士</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <label class="layui-form-label">年龄段：</label>
+                    <input type="text" name="username" placeholder="请输入年龄范围" autocomplete="off" class="layui-input">-
+                    <input type="text" name="username" placeholder="请输入年龄范围" autocomplete="off" class="layui-input">
+                </div>
+                <br><br>
+                <div class="layui-input-inline">
+                    <label class="layui-form-label">行业信息：</label>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="trade">
+                        <option value="">所属行业</option>
+                        <option value="0">一级行业</option>
+                        <option value="1">二级行业</option>
+                    </select>
+                </div>
+
+                <div class="layui-input-inline">
+                    <select name="special">
+                        <option value="">从事专业</option>
+                        <option value="0">技术类</option>
+                        <option value="1">文职类</option>
+                        <option value="2">教育类</option>
+                        <option value="3">计算机</option>
+                        <option value="4">金融</option>
+                        <option value="5">建筑</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="expert">
+                        <option value="">是否为资深专家</option>
+                        <option value="0">是</option>
+                        <option value="1">否</option>
+                    </select>
+                </div>
+                <br><br>
+                <div id="x-city">
+                    <label class="layui-form-label">所在地区：</label>
+                    <div class="layui-input-inline">
+                        <select name="province" lay-filter="province">
+                            <option value="">请选择省</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select name="city" lay-filter="city">
+                            <option value="">请选择市</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select name="area" lay-filter="area">
+                            <option value="">请选择县/区</option>
+                        </select>
+                    </div>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                </div>
+
+            </form>
+            <button class="layui-btn" onclick="getTable()"
+                    style="position: absolute; right: 389px;"><i class="layui-icon" >查询</i>
+            </button>
+            <button class="layui-btn" style="position: absolute; right: 276px;"><i
+                    class="layui-icon">重置</i></button>
+            <div class="x-body">
+
+                <xblock>
+                    <button class="layui-btn layui-btn-danger delAll_btn"><i class="layui-icon"></i>批量删除</button>
+                    <button class="layui-btn layui-btn-normal" onclick="">批量导出</button>
+                    <button class="layui-btn" onclick="x_admin_show('添加专家信息','expertInfoAdd')"><i
+                            class="layui-icon"></i>添加
+                    </button>
+                    <span class="x-right" style="line-height:40px">共有数据：$ 条</span>
+                </xblock>
+                <table class="layui-table" id="demo" lay-filter="user"/>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="__JS__/xcity.js"></script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="detail" style="background-color: #dddddd;color: black;">查看</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+
+</body>
+</html>

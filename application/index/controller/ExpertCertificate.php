@@ -1,0 +1,213 @@
+<?php
+
+namespace app\index\controller;
+
+use app\xt\controller\BaseController;
+use app\index\model\ExpertCertificate as CeritificateModel;
+use app\index\model\ExpertInformation;
+use think\Request;
+
+/**
+ * 用于实现专家资格证书相关功能
+ * @package app\index\controller
+ * @author 谢灿
+ * @data 2019年6月17日
+ */
+class ExpertCertificate extends BaseController
+{
+    /**
+     * 显示资源列表
+     * @return \think\Response
+     * @throws \Exception
+     */
+    public function index()
+    {
+        $request=Request::instance();
+        $expert_info_id =$request->param('expert_info_id');
+        $page=$request->param('page');
+        $limit=$request->param('limit');
+        $start=($page-1)*$limit;
+       try{
+           $infoModel = new ExpertInformation();
+           $certificateModel=new CeritificateModel();
+           if ($expert_info_id!=null){
+               $expert_info = $infoModel -> where('key_id', $expert_info_id)->find();
+               if (isset($expert_info)){
+                   $data=$certificateModel->where('fk_expert_info_id',$expert_info_id)->limit($start,$limit)->select();
+                   $count=count($certificateModel->where('fk_expert_info_id',$expert_info_id)->select());
+                   foreach ($data as $key => $value){
+                       $name=$infoModel ->field('name')-> where('key_id', $value['fk_expert_info_id'])->find();
+                       $value['fk_expert_info_name']=$name['name'];
+                   }
+//                   $data=$expert_info->certificates;
+               }
+           }
+           else{
+               $data=$certificateModel->limit($start,$limit)->select();
+               $count=count($certificateModel->select());
+               foreach ($data as $key => $value){
+                   $name=$infoModel ->field('name')-> where('key_id', $value['fk_expert_info_id'])->find();
+                   $value['fk_expert_info_name']=$name['name'];
+               }
+           }
+           if ($data){
+               return returnPage(200,$count,'专家证书查询成功',$data);
+           }
+           else
+               return returnJson(400,'查询失败，相关专家不存在资格证书','');
+       }catch (\Exception $e) {
+           throw $e;
+       }
+    }
+
+
+    /**
+     * 显示创建资源表单页.
+     *
+     * @return \think\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * 新增专家资格证书
+     *
+     * @param  \think\Request $request
+     * @return \think\Response
+     * @throws \Exception
+     */
+    public function save(Request $request)
+    {
+        $data=$request->param();
+        $user = getLoginedUser();
+        $data['operate_id']=$user->key_id;
+        $data['operate_name']=$user->name;
+        $data['image']=imageUpload();
+        try{
+            $result=CeritificateModel::create($data);
+        }catch (\Exception $e){
+            throw $e;
+        }
+        return returnJson(200,'专家证书新增成功',["key_id"=>$result->key_id]);
+    }
+
+    /**
+     * 显示指定的资源
+     * @param  int $id
+     * @return \think\Response
+     * @throws \Exception
+     */
+    public function read($id)
+    {
+        try{
+            $data=CeritificateModel::get($id);
+            if ($data){
+                return returnJson(200,'专家证书查询成功',$data);
+            }
+            else
+                return returnJson(400,'查询失败，未找到相关数据','');
+        }catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * 显示编辑资源表单页.
+     *
+     * @param  int  $id
+     * @return \think\Response
+     */
+    public function edit($id)
+    {
+        //
+        return returnJson(200,'操作成功','表单数据');
+    }
+
+    /**
+     * 修改专家证书
+     *
+     * @param  \think\Request $request
+     * @param  int $id
+     * @return \think\Response
+     * @throws \Exception
+     */
+    public function update(Request $request, $id)
+    {
+        $data = $request->except('id');
+        $data['key_id']=$id;
+        $user = getLoginedUser();
+        $data['operate_id']=$user->key_id;
+        $data['operate_name']=$user->name;
+        $image=$request->file('image');
+        if(isset($image)){
+            $data['image']=imageUpload();
+        }
+        try{
+            $result = CeritificateModel::update($data, ["key_id" => $id],true);
+        }catch (\Exception $e){
+            throw $e;
+        }
+        return returnJson(200,'专家证书更新成功',$data);
+    }
+
+    /**
+     * 删除指定资源
+     *
+     * @param  int $id
+     * @return \think\Response
+     * @throws \Exception
+     */
+    public function delete($id)
+    {
+        try{
+            $result=CeritificateModel::destroy($id);
+            if ($result){
+                return returnJson(200,'专家证书删除成功','');
+            }
+            else
+                return returnJson(400,'删除失败，未找到相关数据','');
+        }catch (\Exception $e){
+            throw $e;
+        }
+    }
+
+
+    public function major($type=""){
+        $request=Request::instance();
+        $page=$request->param('page');
+        $limit=$request->param('limit');
+        $start=($page-1)*$limit;
+        $infoModel = new ExpertInformation();
+        $certificateModel=new CeritificateModel();
+        if ($type!=""){
+            $expert=$infoModel->where('fk_code_major_id',$type)->select();
+            $i=0;
+            foreach ($expert as $key=>$value) {
+                $result=$certificateModel
+                    ->where('fk_expert_info_id',$value['key_id'])
+//                ->limit($start,$limit)
+                    ->select();
+                foreach ($result as $k => $v){
+                    $data[$i]=$v;
+                    $i++;
+                }
+            }
+        }
+        else
+            $data=$certificateModel
+//                ->limit($start,$limit)
+                ->select();
+        if (!isset($data)){
+            return returnJson(400,'查询失败','');
+        }
+        $count=count($data);
+        $data=array_slice($data,$start,$limit,true);
+        foreach ($data as $key => $value){
+            $name=$infoModel ->field('name')-> where('key_id', $value['fk_expert_info_id'])->find();
+            $value['fk_expert_info_name']=$name['name'];
+        }
+        return returnPage(200,$count,'查询成功',$data);
+    }
+}

@@ -1,0 +1,79 @@
+<?php
+
+namespace app\xt\model;
+
+/**
+ * 系统组织机构Model
+ * Class Organise
+ * @auth 谢灿 2019-6-20
+ * @package app\xt\model
+ */
+class Organise extends BaseModel
+{
+    //组织机构表(包含地区数据)
+    protected $table = "xt_t_organise";
+    protected $pk = "keyid";
+    protected $orgType = 786;
+    protected $auto = ['level', 'type' => 786];
+
+    /**
+     * 全局条件.
+     * 因为地区和组织机构用同一个表所以使用全局条件将这个表分成两个model
+     * @author 谢灿 2019-6-20
+     * @param $query
+     */
+    function base($query){
+        $query->where('type',$this->orgType);
+    }
+
+    /**
+     * 下级
+     * @author 谢灿 2019-6-20
+     * @return \think\model\relation\HasMany
+     */
+    function subOrgs(){
+        return $this->hasMany('Organise', 'LEVEL_UP_KEYID');
+    }
+
+    /**
+     * 上级
+     * @author 谢灿 2019-6-20
+     * @return \think\model\relation\BelongsTo
+     */
+    function parent(){
+        return $this->belongsTo('Organise', 'LEVEL_UP_KEYID');
+    }
+
+    /**
+     * 级别修改器
+     * @author 谢灿 2019-6-20
+     * @param int $level
+     * @return int level
+     */
+    function setLevelAttr($level){
+        if($this->LEVEL_UP_KEYID == 0){
+            return 0;
+        }else{
+            return ++$this->parent()->level;
+        }
+    }
+    /**
+     * 验证组织机构
+     * @author 谢灿 2019-6-20
+     * @param int $parent_id
+     * @param string $name
+     * @param int $keyid
+     * @return bool
+     */
+    function valid($parent_id, $name, $keyid){
+        $valid = new Organise();
+        if(isset($keyid)){
+            $valid->where("keyid",'<>',$keyid);
+        }
+        $exis = $valid->where("dept_name", $name)
+            ->where("LEVEL_UP_KEYID",$parent_id)
+            ->find();
+        return isset($exis);
+    }
+
+}

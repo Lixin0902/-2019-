@@ -1,0 +1,31 @@
+<?php
+/**
+ * Created by IntelliJ IDEA.
+ * User: Can Xie
+ * Date: 2019/6/20
+ * Time: 16:14
+ */
+
+namespace app\xt\model;
+
+/**
+ * 地区model 和组织机构是一个表.
+ * @auth 谢灿 2019-6-20
+ * @package app\xt\model
+ */
+class Area extends BaseModel
+{
+    protected $table = "xt_t_organise";
+    protected $pk = "keyid";
+    protected $auto = ['level', 'type' => 788];
+
+    /**
+     * 全局条件.
+     * 因为地区和组织机构用同一个表所以使用全局条件将这个表分成两个model
+     * @author 谢灿 2019-6-20
+     * @param $query
+     */
+    function base($query){
+        $query->where('type', 788);
+    }
+}

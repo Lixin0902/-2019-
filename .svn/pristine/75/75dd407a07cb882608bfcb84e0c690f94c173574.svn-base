@@ -1,0 +1,29 @@
+<?php
+
+namespace app\index\model;
+
+use app\xt\model\BaseModel;
+use think\Model;
+
+/**
+ * 专家信息表model
+ * @auth 谢灿 2019-6-20
+ * @package app\index\model
+ */
+class ExpertInformation extends BaseModel
+{
+    protected $table="expert_information";
+    protected $autoWriteTimestamp = 'datetime';
+    protected $createTime = 'operate_date';
+    protected $updateTime = 'operate_date';
+
+
+    /**
+     * 关联的资格证书
+     * @auth 谢灿 2019-6-21
+     * @return array|\think\model\relation\HasMany
+     */
+    function certificates(){
+        return $this->hasMany('ExpertCertificate', 'fk_expert_info_id', 'key_id');
+    }
+}

@@ -1,0 +1,77 @@
+<?php
+// +----------------------------------------------------------------------
+// | ThinkPHP [ WE CAN DO IT JUST THINK ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2006-2016 http://thinkphp.cn All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+// +----------------------------------------------------------------------
+// | Author: 流年 <liu21st@gmail.com>
+// +----------------------------------------------------------------------
+
+// 应用公共文件
+
+//  应用常量
+use think\Request;
+use think\Session;
+
+define('PHPSESSID', 'PHPSESSID'); //sessionID Cookie name in php
+/**
+ * 用户登录的session key
+ */
+define('LOGIN_MARK_SESSION_KEY', '_XT_USER_SESSION');
+define('IN_USE', 1);
+define('YES', 1);
+define('NO', 0);
+define('NOT_USE', 0);
+
+/**
+ * 接口返回数据格式
+ * @param int $code 状态码 200=正常 400=访问错误 401=权限错误
+ * @param string $msg 返回信息
+ * @param array $data 返回的data数据
+ * @param int $json_option json格式 默认为 0 不需要修改.
+ * @return \think\response\Json
+ */
+function returnJson($code, $msg = '', $data = [], $json_option = 0)
+{
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE");
+    $returnJson = array('code' => $code, 'msg' => $msg, 'data' => $data);
+    echo json_encode($returnJson, $json_option);
+    exit();
+}
+
+
+/**
+ * 判断当前session是否已经登录,如果已经登录则返回User,否则返回null
+ * @author 谢灿 2019-6-19
+ * @return bool 登录返回true 未登录返回false;
+ */
+function isLogin()
+{
+    $user = Session::get(LOGIN_MARK_SESSION_KEY);
+    return isset($user);
+}
+
+/**
+ * 获取Session当前登录用户
+ * @author 谢灿 2019-6-19
+ * @return array $user 当前登录的用户信息
+ */
+function getLoginedUser()
+{
+    $user = Session::get(LOGIN_MARK_SESSION_KEY);
+    if (!isset($user)) {
+        $request = Request::instance();
+        if ($request->isAjax()) {
+            returnJson(401, 'error 401! Please login first.');
+        } else {
+            //重定向至登录页面
+            header('Location: login');
+            exit();
+        }
+    } else {
+        return $user;
+    }
+}

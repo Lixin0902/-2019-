@@ -1,0 +1,139 @@
+<?php
+
+namespace app\index\controller;
+
+use app\xt\controller\BaseController;
+use app\index\model\ExpertCertificate as CeritificateModel;
+use app\index\model\ExpertInformation;
+use think\Request;
+
+/**
+ * 用于实现专家资格证书相关功能
+ * @package app\index\controller
+ * @author 谢灿
+ * @data 2019年6月17日
+ */
+class ExpertCertificate extends BaseController
+{
+    /**
+     * 显示资源列表
+     * @return \think\Response
+     * @throws \Exception
+     */
+    public function index()
+    {
+        $request=Request::instance();
+        $id=$request->param('id');
+       try{
+           $infoModel = new ExpertInformation();
+           $result = $infoModel -> where('key_id', $id)->find();
+           $data='';
+           if (isset($result)){
+               $data=$result->certificates;
+           }
+       }catch (\Exception $e) {
+           throw $e;
+       }
+       return $this->returnJson(200,'专家证书查询成功',$data);
+    }
+
+
+    /**
+     * 显示创建资源表单页.
+     *
+     * @return \think\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * 新增专家资格证书
+     *
+     * @param  \think\Request $request
+     * @return \think\Response
+     * @throws \Exception
+     */
+    public function save(Request $request)
+    {
+        $data=$request->param();
+        $user = getLoginedUser();
+        $data['operate_id']=$user->key_id;
+        $data['operate_name']=$user->name;
+        try{
+            $result=CeritificateModel::create($data);
+        }catch (\Exception $e){
+            throw $e;
+        }
+        return $this->returnJson(200,'新增专家证书成功',$data);
+    }
+
+    /**
+     * 显示指定的资源
+     * @param  int $id
+     * @return \think\Response
+     * @throws \Exception
+     */
+    public function read($id)
+    {
+        try{
+            $data=CeritificateModel::get($id);
+        }catch (\Exception $e) {
+            throw $e;
+        }
+        return $this->returnJson(200,'专家证书查询成功',$data);
+    }
+
+    /**
+     * 显示编辑资源表单页.
+     *
+     * @param  int  $id
+     * @return \think\Response
+     */
+    public function edit($id)
+    {
+        //
+        return returnJson(200,'操作成功','表单数据');
+    }
+
+    /**
+     * 修改专家证书
+     *
+     * @param  \think\Request $request
+     * @param  int $id
+     * @return \think\Response
+     * @throws \Exception
+     */
+    public function update(Request $request, $id)
+    {
+        $data = $request->param();
+        $user = getLoginedUser();
+        $data['operate_id']=$user->key_id;
+        $data['operate_name']=$user->name;
+        try{
+            $result = CeritificateModel::update($data, ["key_id" => $id],true);
+        }catch (\Exception $e){
+            throw $e;
+        }
+        return $this->returnJson(200,'专家证书更新成功',$data);
+    }
+
+    /**
+     * 删除指定资源
+     *
+     * @param  int $id
+     * @return \think\Response
+     * @throws \Exception
+     */
+    public function delete($id)
+    {
+        try{
+            $result=CeritificateModel::destroy($id);
+        }catch (\Exception $e){
+            throw $e;
+        }
+        return $this->returnJson(200,'专家证书删除成功','');
+    }
+
+}

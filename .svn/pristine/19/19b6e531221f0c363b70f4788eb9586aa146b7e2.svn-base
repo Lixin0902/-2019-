@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>专家信息</title>
+    <link rel="stylesheet" type="text/css" href="__layUI__/css/layui.css">
+    <!--<link rel="stylesheet" type="text/css" href="__CSS__/expert_info_list.css">-->
+    <link rel="stylesheet" type="text/css" href="__CSS__/xadmin.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/font.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/layer.css"
+</head>
+
+<!--包含内容:-->
+<!--专家信息列表, 查询,新增,编辑,删除,导出-->
+<body class="form-wrap">
+<script src="__JS__/jquery.min.js"></script>
+<script src="__layUI__/layui.js"></script>
+<script src="__JS__/xadmin.js"></script>
+
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">专家信息</div>
+        <div class="layui-card-body" style="padding: 15px;">
+            <!--<div class="test-table-reload-btn" style="margin-bottom: 10px;">-->
+                <!--搜索姓名或其他相关信息：-->
+                <!--<div class="layui-inline">-->
+                    <!--<input class="layui-input" name="id" id="test-table-demoReload" autocomplete="off">-->
+                <!--</div>-->
+                <!--<button class="layui-btn" data-type="reload">搜索</button>-->
+            <!--</div>-->
+            <form class="layui-form  x-so">
+                <!--<input class="layui-input" placeholder="开始日" name="start" id="start" lay-key="1">-->
+                <!--<input class="layui-input" placeholder="截止日" name="end" id="end" lay-key="2">-->
+                <label class="layui-form-label">个人信息：</label>
+                <input type="text" name="username" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+                <!--<div class="layui-input-inline">-->
+                    <!--<select name="contrller">-->
+                        <!--<option>性别</option>-->
+                        <!--<option>男</option>-->
+                        <!--<option>女</option>-->
+                    <!--</select><div class="layui-unselect layui-form-select"><div class="layui-select-title"><input type="text" placeholder="请选择" value="性别" readonly="" class="layui-input layui-unselect"><i class="layui-edge"></i></div><dl class="layui-anim layui-anim-upbit" style=""><dd lay-value="性别" class="layui-this">性别</dd><dd lay-value="男" class="">男</dd><dd lay-value="女" class="">女</dd></dl></div>-->
+                <!--</div>-->
+                <div class="layui-input-inline" >
+                    <select name="sex" lay-verify="">
+                        <option value="">请选择性别</option>
+                        <option value="0">男</option>
+                        <option value="1">女</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="professional">
+                        <option value="">请选择职称</option>
+                        <option value="0">学士</option>
+                        <option value="1">硕士</option>
+                        <option value="2">博士</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <label class="layui-form-label">年龄段：</label>
+                    <input type="text" name="username" placeholder="请输入年龄范围" autocomplete="off" class="layui-input">-
+                    <input type="text" name="username" placeholder="请输入年龄范围" autocomplete="off" class="layui-input">
+                </div>
+                <br><br>
+                <div class="layui-input-inline">
+                    <label class="layui-form-label">行业信息：</label>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="trade">
+                        <option value="">所属行业</option>
+                        <option value="0">一级行业</option>
+                        <option value="1">二级行业</option>
+                    </select>
+                </div>
+
+                <div class="layui-input-inline">
+                    <select name="special">
+                        <option value="">从事专业</option>
+                        <option value="0">技术类</option>
+                        <option value="1">文职类</option>
+                        <option value="2">教育类</option>
+                        <option value="3">计算机</option>
+                        <option value="4">金融</option>
+                        <option value="5">建筑</option>
+                    </select>
+                </div>
+                    <div class="layui-input-inline">
+                        <select name="expert">
+                            <option value="">是否为资深专家</option>
+                            <option value="0">是</option>
+                            <option value="1">否</option>
+                        </select>
+                    </div>
+                    <br><br>
+                    <div id="x-city">
+                        <label class="layui-form-label">所在地区：</label>
+                        <div class="layui-input-inline">
+                            <select name="province" lay-filter="province">
+                                <option value="">请选择省</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="city" lay-filter="city">
+                                <option value="">请选择市</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="area" lay-filter="area">
+                                <option value="">请选择县/区</option>
+                            </select>
+                        </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button class="layui-btn" lay-submit="" lay-filter="sreach" style="position: absolute; right: 389px;"><i class="layui-icon">查询</i></button>
+                        <!--<button class="layui-btn" style="float: right; margin-right: 21px;"><i class="layui-icon layui-icon-refresh-3">重置</i></button>-->
+                        <!--<button class="layui-btn" lay-submit="" lay-filter="sreach" style="float: right;margin-right: 24px;"><i class="layui-icon">查询</i></button>-->
+                        <!--<button class="layui-btn" lay-submit="" lay-filter="refresh-3"><i class="layui-icon">查询</i></button>-->
+                        <button class="layui-btn" style="position: absolute; right: 276px;"><i class="layui-icon layui-icon-refresh-1">重置</i></button>
+                    </div>
+            </form>
+            <div class="x-body">
+
+                <xblock>
+                    <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
+                    <button class="layui-btn layui-btn-normal" onclick=""><i class="layui-icon"></i>批量导出</button>
+                    <button class="layui-btn" onclick="x_admin_show('添加用户','expertInfoAdd')"><i class="layui-icon"></i>添加</button>
+                    <span class="x-right" style="line-height:40px">共有数据：88 条</span>
+                </xblock>
+                <table class="layui-table" id="demo" lay-filter="" />
+            </div>
+        </div>
+    </div>
+</div>
+<script src="__JS__/xcity.js"></script>
+<script type="text/javascript">
+
+    layui.use(['form','code'], function(){
+        form = layui.form;
+
+        layui.code();
+
+        $('#x-city').xcity('安徽','滁州市','琅琊区');
+
+    });
+    layui.use('table', function(){
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#demo'
+//            ,height: 312
+//            ,width: 1016
+            ,method:'Get'
+            ,url: 'http://localhost:8088/chzu/public/experInfo' //数据接口
+//            ,data:[
+//                {"code":0,"msg":"","count":1000,"data":[{"id":10000,"username":"user-0","sex":"女","city":"城市-0","sign":"签名-0","experience":255,"logins":24,"wealth":82830700,"classify":"作家","score":57},{"id":10001,"username":"user-1","sex":"男","city":"城市-1","sign":"签名-1","experience":884,"logins":58,"wealth":64928690,"classify":"词人","score":27},{"id":10002,"username":"user-2","sex":"女","city":"城市-2","sign":"签名-2","experience":650,"logins":77,"wealth":6298078,"classify":"酱油","score":31},{"id":10003,"username":"user-3","sex":"女","city":"城市-3","sign":"签名-3","experience":362,"logins":157,"wealth":37117017,"classify":"诗人","score":68},{"id":10004,"username":"user-4","sex":"男","city":"城市-4","sign":"签名-4","experience":807,"logins":51,"wealth":76263262,"classify":"作家","score":6},{"id":10005,"username":"user-5","sex":"女","city":"城市-5","sign":"签名-5","experience":173,"logins":68,"wealth":60344147,"classify":"作家","score":87},{"id":10006,"username":"user-6","sex":"女","city":"城市-6","sign":"签名-6","experience":982,"logins":37,"wealth":57768166,"classify":"作家","score":34},{"id":10007,"username":"user-7","sex":"男","city":"城市-7","sign":"签名-7","experience":727,"logins":150,"wealth":82030578,"classify":"作家","score":28},{"id":10008,"username":"user-8","sex":"男","city":"城市-8","sign":"签名-8","experience":951,"logins":133,"wealth":16503371,"classify":"词人","score":14},{"id":10009,"username":"user-9","sex":"女","city":"城市-9","sign":"签名-9","experience":484,"logins":25,"wealth":86801934,"classify":"词人","score":75},{"id":10010,"username":"user-10","sex":"女","city":"城市-10","sign":"签名-10","experience":1016,"logins":182,"wealth":71294671,"classify":"诗人","score":34},{"id":10011,"username":"user-11","sex":"女","city":"城市-11","sign":"签名-11","experience":492,"logins":107,"wealth":8062783,"classify":"诗人","score":6},{"id":10012,"username":"user-12","sex":"女","city":"城市-12","sign":"签名-12","experience":106,"logins":176,"wealth":42622704,"classify":"词人","score":54},{"id":10013,"username":"user-13","sex":"男","city":"城市-13","sign":"签名-13","experience":1047,"logins":94,"wealth":59508583,"classify":"诗人","score":63},{"id":10014,"username":"user-14","sex":"男","city":"城市-14","sign":"签名-14","experience":873,"logins":116,"wealth":72549912,"classify":"词人","score":8},{"id":10015,"username":"user-15","sex":"女","city":"城市-15","sign":"签名-15","experience":1068,"logins":27,"wealth":52737025,"classify":"作家","score":28},{"id":10016,"username":"user-16","sex":"女","city":"城市-16","sign":"签名-16","experience":862,"logins":168,"wealth":37069775,"classify":"酱油","score":86},{"id":10017,"username":"user-17","sex":"女","city":"城市-17","sign":"签名-17","experience":1060,"logins":187,"wealth":66099525,"classify":"作家","score":69},{"id":10018,"username":"user-18","sex":"女","city":"城市-18","sign":"签名-18","experience":866,"logins":88,"wealth":81722326,"classify":"词人","score":74},{"id":10019,"username":"user-19","sex":"女","city":"城市-19","sign":"签名-19","experience":682,"logins":106,"wealth":68647362,"classify":"词人","score":51},{"id":10020,"username":"user-20","sex":"男","city":"城市-20","sign":"签名-20","experience":770,"logins":24,"wealth":92420248,"classify":"诗人","score":87},{"id":10021,"username":"user-21","sex":"男","city":"城市-21","sign":"签名-21","experience":184,"logins":131,"wealth":71566045,"classify":"词人","score":99},{"id":10022,"username":"user-22","sex":"男","city":"城市-22","sign":"签名-22","experience":739,"logins":152,"wealth":60907929,"classify":"作家","score":18},{"id":10023,"username":"user-23","sex":"女","city":"城市-23","sign":"签名-23","experience":127,"logins":82,"wealth":14765943,"classify":"作家","score":30},{"id":10024,"username":"user-24","sex":"女","city":"城市-24","sign":"签名-24","experience":212,"logins":133,"wealth":59011052,"classify":"词人","score":76},{"id":10025,"username":"user-25","sex":"女","city":"城市-25","sign":"签名-25","experience":938,"logins":182,"wealth":91183097,"classify":"作家","score":69},{"id":10026,"username":"user-26","sex":"男","city":"城市-26","sign":"签名-26","experience":978,"logins":7,"wealth":48008413,"classify":"作家","score":65},{"id":10027,"username":"user-27","sex":"女","city":"城市-27","sign":"签名-27","experience":371,"logins":44,"wealth":64419691,"classify":"诗人","score":60},{"id":10028,"username":"user-28","sex":"女","city":"城市-28","sign":"签名-28","experience":977,"logins":21,"wealth":75935022,"classify":"作家","score":37},{"id":10029,"username":"user-29","sex":"男","city":"城市-29","sign":"签名-29","experience":647,"logins":107,"wealth":97450636,"classify":"酱油","score":27}]}
+//            ]
+            ,page: true
+            ,limits: [5,10,15,20]
+            ,limit: 5
+            ,response: {
+//                statusName: 'status' //规定数据状态的字段名称，默认：code
+                statusCode: 200 //规定成功的状态码，默认：0
+//                ,msgName: 'hint' //规定状态信息的字段名称，默认：msg
+//                ,countName: 'total' //规定数据总数的字段名称，默认：count
+                ,dataName: 'res' //规定数据列表的字段名称，默认：data
+            }
+            ,parseData: function(res) { //res 即为原始返回的数据
+                return {
+                    "code": res.status, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.total, //解析数据长度
+                    "data": res.data //解析数据列表
+                }
+            }
+//            ,toolbar: '#barDemo'
+//            ,defaultToolbar: ['filter']
+//            , count: 1000
+//            , limit: 10
+//            ,cellMinWidth: 100
+            ,cols: [[ //表头
+                {checkbox: true, fixed: true}
+                ,{field: 'key_id', title: 'ID',  sort: true, width: 60}
+                ,{field: 'name', title: '姓名'}
+                ,{field: 'fk_code_gender_id', title: '性别',  sort: true}
+                ,{field: 'title_certificate_code', title: '职称'}
+                ,{field: 'age', title: '年龄',  sort: true}
+                ,{field: 'fk_code_profession_id', title: '所属行业'}
+                ,{field: 'fk_code_major_id', title: '从事专业'}
+                ,{field: 'is_senior', title: '是否为资深专家', minWidth: 130}
+                ,{field: 'fk_area_id', title: '所在地区',  sort: true}
+                ,{fixed: 'right', title: '操作', align:'center', toolbar: '#barDemo', minWidth: 182}
+            ]]
+        });
+
+    });
+
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="detail" style="background-color: #dddddd;color: black;">查看</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit" onclick="x_admin_show('编辑','expertInfoEdit')">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+
+    <!-- 这里同样支持 laytpl 语法，如： -->
+    <!--{{#  if(d.auth > 2){ }}-->
+    <!--<a class="layui-btn layui-btn-xs" lay-event="check">审核</a>-->
+    <!--{{#  } }}-->
+</script>
+
+
+
+
+
+</body>
+</html>

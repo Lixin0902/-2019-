@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>后台登录</title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/xadmin.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/font.css">
+    <script src="__JS__/jquery.min.js"></script>
+    <script src="__layUI__/layui.js"></script>
+    <script src="__JS__/xadmin.js"></script>
+</head>
+<body>
+<div class="x-body">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label for="name" class="layui-form-label">
+                姓名
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="name" name="name" required lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>
+            </div>
+            <label for="fk_code_bank_type_id" class="layui-form-label">
+                <span class="x-red">*</span>开户行
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="fk_code_bank_type_id" name="fk_code_bank_type_id" required lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <label for="bank_code" class="layui-form-label">
+                <span class="x-red">*</span>银行账户
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="bank_code" name="bank_code" required lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>性别
+            </label>
+            <div class="layui-input-inline">
+                <select name="fk_code_gender_id" id="fk_code_gender_id">
+                    <option value="0">女</option>
+                    <option value="1">男</option>
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>
+            </div>
+            <label class="layui-form-label">
+                <span class="x-red">*</span>证件类型
+            </label>
+            <div class="layui-input-inline">
+                <select name="fk_certificate_type_id" id="fk_certificate_type_id">
+                    <option value="0">中华人民共和国居民身份证</option>
+                    <option value="1">港澳台同胞通行证</option>
+                </select>
+            </div>
+            <label for="cerificate_code" class="layui-form-label">
+                <span class="x-red">*</span>证件号码
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="cerificate_code" name="cerificate_code" required lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>职称
+            </label>
+            <div class="layui-input-inline">
+                <select name="">
+                    <option value="0">学士</option>
+                    <option value="1">硕士</option>
+                    <option value="2">博士</option>
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>
+            </div>
+            <label class="layui-form-label">
+                <span class="x-red">*</span>是否为应急专家
+            </label>
+            <div class="layui-input-inline">
+                <select name="is_emergency" id="is_emergency">
+                    <option value="0">否</option>
+                    <option value="1">是</option>
+                </select>
+            </div>
+            <label class="layui-form-label">
+                <span class="x-red">*</span>是否培训
+            </label>
+            <div class="layui-input-inline">
+                <select name="is_trained" id="is_trained">
+                    <option value="0">否</option>
+                    <option value="1">是</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="age" class="layui-form-label">
+                <span class="x-red">*</span>年龄
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="age" name="age"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>
+            </div>
+            <label class="layui-form-label">
+                <span class="x-red">*</span>政治面貌
+            </label>
+            <div class="layui-input-inline">
+                <select name="fk_code_politics_status_id" id="fk_code_politics_status_id">
+                    <option value="0">党员</option>
+                    <option value="1">共青团员</option>
+                    <option value="2">群众</option>
+                </select>
+            </div>
+            <label class="layui-form-label">
+                <span class="x-red">*</span>出生日期
+            </label>
+            <div class="layui-input-inline">
+                <input class="layui-input" placeholder="开始日" name="birthday" id="birthday">
+            </div>
+
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>所属行业
+            </label>
+            <div class="layui-input-inline">
+                <select name="fk_code_profession_id" id="fk_code_profession_id">
+                    <option value="0">一级行业</option>
+                    <option value="1">二级行业</option>
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>
+            </div>
+            <label for="social_security_cards_code" class="layui-form-label">
+                <span class="x-red">*</span>社会保障卡号
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="social_security_cards_code" name="social_security_cards_code"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <label for="picture" class="layui-form-label">
+                <span class="x-red">*</span>个人证件照
+            </label>
+            <button type="button" class="layui-btn" id="picture" name="picture">
+                <i class="layui-icon">&#xe67c;</i>点击上传
+            </button>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>从事专业
+            </label>
+            <div class="layui-input-inline">
+                <select name="fk_code_major_id" id="fk_code_major_id">
+                    <option value="0">技术类</option>
+                    <option value="1">文职类</option>
+                    <option value="2">教育类</option>
+                    <option value="3">计算机</option>
+                    <option value="4">金融</option>
+                    <option value="5">建筑</option>
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>
+            </div>
+            <label class="layui-form-label">
+                <span class="x-red">*</span>最高学位
+            </label>
+            <div class="layui-input-inline">
+                <select name="fk_code_highest_degree_id" id="fk_code_highest_degree_id">
+                    <option value="0">博士</option>
+                    <option value="1">硕士</option>
+                    <option value="2">本科</option>
+                    <option value="3">专科</option>
+                    <option value="4">高中</option>
+                    <option value="5">初中</option>
+                </select>
+            </div>
+            <label for="fk_code_title_id" class="layui-form-label">
+                <span class="x-red">*</span>职称证书号
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="fk_code_title_id" name="fk_code_title_id"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>是否为资深专家
+            </label>
+            <div class="layui-input-inline">
+                <select name="is_senior" id="is_senior">
+                    <option value="0">否</option>
+                    <option value="1">是</option>
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>
+            </div>
+            <label for="position" class="layui-form-label">
+                <span class="x-red">*</span>职务
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="position" name="position"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">
+                <span class="x-red">*</span>第一学历
+            </label>
+            <div class="layui-input-inline">
+                <select name="fk_code_first_education_id" id="fk_code_first_education_id">
+                    <option value="0">博士</option>
+                    <option value="1">硕士</option>
+                    <option value="2">本科</option>
+                    <option value="3">专科</option>
+                    <option value="4">高中</option>
+                    <option value="5">初中</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="layui-form-item">
+            <label for="first_graduate_school_and_major" class="layui-form-label">
+                <span class="x-red">*</span>第一学历毕业院校及专业
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="first_graduate_school_and_major" name="first_graduate_school_and_major"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">
+                <span class="x-red">*</span>最高学历
+            </label>
+            <div class="layui-input-inline">
+                <select name="fk_code_highest_education_id" id="fk_code_highest_education_id">
+                    <option value="0">博士</option>
+                    <option value="1">硕士</option>
+                    <option value="2">本科</option>
+                    <option value="3">专科</option>
+                    <option value="4">高中</option>
+                    <option value="5">初中</option>
+                </select>
+            </div>
+            <label for="highest_graduate_school_and_major" class="layui-form-label">
+                <span class="x-red">*</span>最高学历毕业院校及专业
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="highest_graduate_school_and_major" name="highest_graduate_school_and_major"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="marjor_age" class="layui-form-label">
+                <span class="x-red">*</span>从事专业年限
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="marjor_age" name="marjor_age"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <label for="fk_org_id" class="layui-form-label">
+                <span class="x-red">*</span>所属单位
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="fk_org_id" name="fk_org_id"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <label for="working_age" class="layui-form-label">
+                <span class="x-red">*</span>工龄
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="working_age" name="working_age"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+        <div id="x-city">
+            <label class="layui-form-label">所属区域：</label>
+            <div class="layui-input-inline">
+                <select name="province" lay-filter="province">
+                    <option value="">请选择省</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="city" lay-filter="city">
+                    <option value="">请选择市</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="area" lay-filter="area">
+                    <option value="">请选择县/区</option>
+                </select>
+            </div>
+        </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                <span class="x-red">*</span>移动电话
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="phone" name="phone" lay-verify="required|phone|number"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <label for="address" class="layui-form-label">
+                <span class="x-red">*</span>家庭住址
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="address" name="address"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <label for="post_code" class="layui-form-label">
+                <span class="x-red">*</span>家庭邮编
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="post_code" name="post_code"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="email_address" class="layui-form-label">
+                <span class="x-red">*</span>电子邮箱
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="email_address" name="email_address"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <label for="professional_technical_expertise" class="layui-form-label">
+                <span class="x-red">*</span>专业技术特长
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="professional_technical_expertise" name="professional_technical_expertise"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="post_code" class="layui-form-label">
+                <span class="x-red">*</span>资格证书图片
+            </label>
+            <button type="button" class="layui-btn" id="test1" >
+                <i class="layui-icon">&#xe67c;</i>点击上传资格证书图片
+            </button>
+        </div>
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+            </label>
+            <button  class="layui-btn" lay-filter="add" lay-submit="" style="background-color: #FF5722;">
+                添加此专家信息
+            </button>
+        </div>
+    </form>
+</div>
+<script src="__JS__/xcity.js"></script>
+<script type="text/javascript">
+
+    layui.use(['form','code'], function(){
+        form = layui.form;
+
+        layui.code();
+
+        $('#x-city').xcity('安徽','滁州市','琅琊区');
+
+    });
+</script>
+<script>
+    layui.use('laydate', function() {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#birthday' //指定元素
+        });
+    });
+    layui.use(['form','layer', 'upload'], function(){
+        $ = layui.jquery;
+        var form = layui.form
+                ,layer = layui.layer
+                ,upload = layui.upload;
+        //监听提交
+        form.on('submit(add)', function(data){
+            console.log(data);
+            //发异步，把数据提交给php
+//            layer.alert("增加中", {icon: 7},function () {
+                $.ajax({
+                    url:'http://localhost:8088/chzu/public/experInfo',
+                    type:'POST',
+                    dataType:'json',
+                    data:{name:data.field.name,
+                        phone:data.field.phone,
+                        fk_code_gender_id:data.field.fk_code_gender_id,
+                        fk_code_bank_type_id:data.field.fk_code_bank_type_id,
+                        bank_code:data.field.bank_code,
+                        fk_certificate_type_id:data.field.fk_certificate_type_id,
+                        cerificate_code:data.field.cerificate_code,
+                        age:data.field.age,
+                        is_emergency:data.field.is_emergency,
+                        is_trained:data.field.is_trained,
+                        fk_code_politics_status_id:data.field.fk_code_politics_status_id,
+                        birthday:data.field.birthday,
+                        social_security_cards_code:data.field.social_security_cards_code,
+                        picture:data.field.picture,
+                        fk_code_highest_degree_id:data.field.fk_code_highest_degree_id,
+                        fk_code_title_id:data.field.fk_code_title_id,
+                        title_certificate_code:data.field.title_certificate_code,
+                        position:data.field.position,
+                        fk_code_first_education_id:data.field.fk_code_first_education_id,
+                        first_graduate_school_and_major:data.field.first_graduate_school_and_major,
+                        fk_code_highest_education_id:data.field.fk_code_highest_education_id,
+                        highest_graduate_school_and_major:data.field.highest_graduate_school_and_major,
+                        fk_code_major_id:data.field.fk_code_major_id,
+                        fk_code_profession_id:data.field.fk_code_profession_id,
+                        marjor_age:data.field.marjor_age,
+                        fk_org_id:data.field.fk_org_id,
+                        fk_area_id:data.field.fk_area_id,
+                        working_age:data.field.working_age,
+                        is_senior:data.field.is_senior,
+                        address:data.field.address,
+                        post_code:data.field.post_code,
+                        email_address:data.field.email_address,
+                        professional_technical_expertise:data.field.professional_technical_expertise,
+                    },
+                    success:function (data) {
+                        var returnCode=data.code;
+                        if(returnCode==200){
+                            layer.closeAll('loading');
+                            layer.load(2);
+                            layer.msg("添加成功", {icon: 6});
+                            setTimeout(function(){
+                                window.parent.location.reload();//修改成功后刷新父界面
+                            }, 1000);
+                            //加载层-风格
+                        }else{
+                            layer.msg("添加失败，请检查信息是否符合要求", {icon: 5});
+                        }
+                    }
+//                })
+//                // 获得frame索引
+//                var index = parent.layer.getFrameIndex(window.name);
+//                //关闭当前frame
+//                parent.layer.close(index);
+            });
+            return false;
+        });
+        var uploadInst = upload.render({
+            elem: '#test1' //绑定元素
+            ,url: '/upload/' //上传接口
+            ,done: function(res){
+                //上传完毕回调
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+        });
+
+
+    });
+</script>
+</body>
+</html>

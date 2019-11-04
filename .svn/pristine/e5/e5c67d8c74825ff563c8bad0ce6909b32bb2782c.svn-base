@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>专家信息</title>
+    <link rel="stylesheet" type="text/css" href="__layUI__/css/layui.css">
+    <!--<link rel="stylesheet" type="text/css" href="__CSS__/expert_info_list.css">-->
+    <link rel="stylesheet" type="text/css" href="__CSS__/xadmin.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/font.css">
+</head>
+<body>
+<!--包含内容:-->
+<!--专家信息列表, 查询,新增,编辑,删除,导出-->
+<body class="form-wrap">
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">专家信息</div>
+        <div class="layui-card-body" style="padding: 15px;">
+            <div class="test-table-reload-btn" style="margin-bottom: 10px;">
+                搜索姓名或其他相关信息：
+                <div class="layui-inline">
+                    <input class="layui-input" name="id" id="test-table-demoReload" autocomplete="off">
+                </div>
+                <button class="layui-btn" data-type="reload">搜索</button>
+            </div>
+            <div class="x-body">
+
+                <xblock>
+                    <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
+                    <button class="layui-btn" onclick="x_admin_show('添加用户','./member-add.html',600,400)"><i class="layui-icon"></i>添加</button>
+                    <span class="x-right" style="line-height:40px">共有数据：88 条</span>
+                </xblock>
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th>
+                            <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div>
+                        </th>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th>职称</th>
+                        <th>年龄</th>
+                        <th>所属行业</th>
+                        <th>从事行业</th>
+                        <th>所在地区</th>
+                        <th>是否为资深专家</th>
+                        <th>操作</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="2"><i class="layui-icon"></i></div>
+                        </td>
+                        <td>1</td>
+                        <td>小明</td>
+                        <td>男</td>
+                        <td>13000000000</td>
+                        <td>admin@mail.com</td>
+                        <td>北京市 海淀区</td>
+                        <td>2017-01-01 11:11:42</td>
+                        <td class="td-status">
+                            是
+                        <td class="td-manage">
+
+                            <a title="编辑" class="layui-btn layui-btn-sm layui-btn-normal" onclick="x_admin_show('编辑','member-edit.html',600,400)" href="javascript:;">
+                                编辑
+                            </a>
+                            <a title="删除" class="layui-btn layui-btn-sm layui-btn-danger" onclick="member_del(this,'要删除的id')" href="javascript:;">
+                                删除
+                            </a>
+                            <a onclick="member_stop(this,'10001')" class="layui-btn layui-btn-sm layui-btn-primary" href="javascript:;" title="导出">
+                                导出
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="2"><i class="layui-icon"></i></div>
+                        </td>
+                        <td>1</td>
+                        <td>小明</td>
+                        <td>男</td>
+                        <td>13000000000</td>
+                        <td>admin@mail.com</td>
+                        <td>北京市 海淀区</td>
+                        <td>2017-01-01 11:11:42</td>
+                        <td class="td-status">
+                            是
+                        <td class="td-manage">
+
+                            <a title="编辑" class="layui-btn layui-btn-sm layui-btn-normal" onclick="x_admin_show('编辑','member-edit.html',600,400)" href="javascript:;">
+                                编辑
+                            </a>
+                            <a title="删除" class="layui-btn layui-btn-sm layui-btn-danger" onclick="member_del(this,'要删除的id')" href="javascript:;">
+                                删除
+                            </a>
+                            <a onclick="member_stop(this,'10001')" class="layui-btn layui-btn-sm layui-btn-primary" href="javascript:;" title="导出">
+                                导出
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="2"><i class="layui-icon"></i></div>
+                        </td>
+                        <td>1</td>
+                        <td>小明</td>
+                        <td>男</td>
+                        <td>13000000000</td>
+                        <td>admin@mail.com</td>
+                        <td>北京市 海淀区</td>
+                        <td>2017-01-01 11:11:42</td>
+                        <td class="td-status">
+                            是
+                        <td class="td-manage">
+
+                            <a title="编辑" class="layui-btn layui-btn-sm layui-btn-normal" onclick="x_admin_show('编辑','member-edit.html',600,400)" href="javascript:;">
+                                编辑
+                            </a>
+                            <a title="删除" class="layui-btn layui-btn-sm layui-btn-danger" onclick="member_del(this,'要删除的id')" href="javascript:;">
+                                删除
+                            </a>
+                            <a onclick="member_stop(this,'10001')" class="layui-btn layui-btn-sm layui-btn-primary" href="javascript:;" title="导出">
+                                导出
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="2"><i class="layui-icon"></i></div>
+                        </td>
+                        <td>1</td>
+                        <td>小明</td>
+                        <td>男</td>
+                        <td>13000000000</td>
+                        <td>admin@mail.com</td>
+                        <td>北京市 海淀区</td>
+                        <td>2017-01-01 11:11:42</td>
+                        <td class="td-status">
+                            是
+                        <td class="td-manage">
+
+                            <a title="编辑" class="layui-btn layui-btn-sm layui-btn-normal" onclick="x_admin_show('编辑','member-edit.html',600,400)" href="javascript:;">
+                                编辑
+                            </a>
+                            <a title="删除" class="layui-btn layui-btn-sm layui-btn-danger" onclick="member_del(this,'要删除的id')" href="javascript:;">
+                                删除
+                            </a>
+                            <a onclick="member_stop(this,'10001')" class="layui-btn layui-btn-sm layui-btn-primary" href="javascript:;" title="导出">
+                                导出
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="2"><i class="layui-icon"></i></div>
+                        </td>
+                        <td>1</td>
+                        <td>小明</td>
+                        <td>男</td>
+                        <td>13000000000</td>
+                        <td>admin@mail.com</td>
+                        <td>北京市 海淀区</td>
+                        <td>2017-01-01 11:11:42</td>
+                        <td class="td-status">
+                            是
+                        <td class="td-manage">
+
+                            <a title="编辑" class="layui-btn layui-btn-sm layui-btn-normal" onclick="x_admin_show('编辑','member-edit.html',600,400)" href="javascript:;">
+                                编辑
+                            </a>
+                            <a title="删除" class="layui-btn layui-btn-sm layui-btn-danger" onclick="member_del(this,'要删除的id')" href="javascript:;">
+                                删除
+                            </a>
+                            <a onclick="member_stop(this,'10001')" class="layui-btn layui-btn-sm layui-btn-primary" href="javascript:;" title="导出">
+                                导出
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="2"><i class="layui-icon"></i></div>
+                        </td>
+                        <td>1</td>
+                        <td>小明</td>
+                        <td>男</td>
+                        <td>13000000000</td>
+                        <td>admin@mail.com</td>
+                        <td>北京市 海淀区</td>
+                        <td>2017-01-01 11:11:42</td>
+                        <td class="td-status">
+                            是
+                        <td class="td-manage">
+
+                            <a title="编辑" class="layui-btn layui-btn-sm layui-btn-normal" onclick="x_admin_show('编辑','member-edit.html',600,400)" href="javascript:;">
+                                编辑
+                            </a>
+                            <a title="删除" class="layui-btn layui-btn-sm layui-btn-danger" onclick="member_del(this,'要删除的id')" href="javascript:;">
+                                删除
+                            </a>
+                            <a onclick="member_stop(this,'10001')" class="layui-btn layui-btn-sm layui-btn-primary" href="javascript:;" title="导出">
+                                导出
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="2"><i class="layui-icon"></i></div>
+                        </td>
+                        <td>1</td>
+                        <td>小明</td>
+                        <td>男</td>
+                        <td>13000000000</td>
+                        <td>admin@mail.com</td>
+                        <td>北京市 海淀区</td>
+                        <td>2017-01-01 11:11:42</td>
+                        <td class="td-status">
+                            是
+                        <td class="td-manage">
+
+                            <a title="编辑" class="layui-btn layui-btn-sm layui-btn-normal" onclick="x_admin_show('编辑','member-edit.html',600,400)" href="javascript:;">
+                                编辑
+                            </a>
+                            <a title="删除" class="layui-btn layui-btn-sm layui-btn-danger" onclick="member_del(this,'要删除的id')" href="javascript:;">
+                                删除
+                            </a>
+                            <a onclick="member_stop(this,'10001')" class="layui-btn layui-btn-sm layui-btn-primary" href="javascript:;" title="导出">
+                                导出
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="page">
+                    <div>
+                        <a class="prev" href="">&lt;&lt;</a>
+                        <a class="num" href="">1</a>
+                        <span class="current">2</span>
+                        <a class="num" href="">3</a>
+                        <a class="num" href="">489</a>
+                        <a class="next" href="">&gt;&gt;</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script src="__JS__/jquery.min.js"></script>
+<script src="__layUI__/layui.js"></script>
+<script src="__JS__/xadmin.js"></script>
+<script src="__JS__/xcity.js"></script>
+</body>
+</html>

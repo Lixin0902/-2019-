@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>专家资格证书管理</title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/xadmin.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/font.css">
+    <script src="__JS__/jquery.min.js"></script>
+    <script src="__layUI__/layui.js"></script>
+    <script src="__JS__/xadmin.js"></script>
+</head>
+<body>
+<div class="x-body">
+    <div class="layui-form layui-form-pane">
+        <div class="layui-form-item pane">
+            <label class="layui-form-label">
+                专家姓名：
+            </label>
+            <div class="layui-input-inline">
+                <select id="name" lay-filter="expertname">
+                    <option value="" selected>全部资格证书</option>
+                </select>
+            </div>
+        </div>
+        </div>
+
+    <table class="layui-table" id="demo" lay-filter="user"/>
+
+    </div>
+
+<script type="text/javascript">
+    var expert_info_id = '';
+    /**
+     * 初始渲染
+     */
+    $(document).ready(function () {
+        getTable();
+    });
+    /**
+     * 根据专家不同重载表格
+     */
+    layui.use('form', function () {
+        var form = layui.form;
+        form.on('select(expertname)', function (data) {
+            expert_info_id = data.value;
+            getTable();
+        })
+    })
+    /**
+     * 获取表格信息
+     */
+    function getTable() {
+        layui.use('table', function () {
+            var table = layui.table,
+                    $ = layui.jquery;
+            //第一个实例
+            var demoIns = table.render({
+                elem: '#demo'
+                ,
+                method: 'Get'
+                ,
+                height: 'full-115'
+                ,
+                even: true,
+                contentType: 'json',
+                url: '__ROOT__/experCertificate?expert_info_id=' + expert_info_id
+                ,
+                page: true,
+                limits: [5, 10, 15, 20], //显示
+                limit: 10,//每页默认显示的数量
+//                async: true
+                id: 'demoTable'/* 重载表格时要用到的id ,最好别和标签的id一样*/
+                ,
+                response: {
+                    statusName: 'code',
+                    statusCode: 200 //规定成功的状态码，默认：0
+                    , countName: 'count' //规定数据总数的字段名称，默认：count
+                    , dataName: 'data' //规定数据列表的字段名称，默认：data
+                    , msgName: 'msg'
+                }
+                ,
+                parseData: function (res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.code, //解析接口状态
+                        "msg": res.msg, //解析提示文本
+                        "count": res.count, //解析数据长度
+                        "data": res.data //解析数据列表
+                    }
+                }
+                ,
+                cols: [[ //表头
+                    {checkbox: true, fixed: true}
+                    , {field: 'key_id', title: 'ID', sort: true, width: 60}
+                    , {field: 'name', title: '证书名称'}
+                    , {field: 'sort', title: '证书排序'}
+                    , {field: 'code', title: '证书编号', sort: true}
+                    , {field: 'fk_expert_info_id', title: '所属专家ID'}
+                    , {field: 'image', title: '资格证书图片', templet:'<div><img src="__ROOT__/{{d.image}}"></div>'}
+                    , {fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo', width: 202}
+                ]]
+            });
+        })
+    }
+
+    /**
+     * 初始化Form渲染，以便获取下拉框的值
+     */
+    function renderFrom() {
+        layui.use('form', function () {
+            var form = layui.form;
+            form.render();
+        })
+    }
+    /**
+     * 表单中带下拉框的内容查询
+     */
+    layui.use(['form'], function () {
+        var form = layui.form;
+        var $ = layui.jquery;
+        $(function () {
+//                    从数据库获取专家信息名称填入到下拉框中
+            var str = '';
+            $.ajax({
+                type: "GET",
+                url: "__ROOT__/experInfo",
+                data: {},
+                dataType: "json",
+                success: function (data) {
+                    var da = data.data;
+                    $.each(da, function (i, json) {
+                        var $option = $("<option value='" + json["key_id"] + "'>" + json["name"] + "</option>");
+                        $("#name").append($option);
+                        renderFrom();
+                    });
+                }
+            });
+        })
+    })
+
+
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="detail" style="background-color: #dddddd;color: black;">查看</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+</body>
+</html>
